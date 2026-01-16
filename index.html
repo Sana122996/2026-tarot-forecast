@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- 动态星空背景 --- */
+        /* --- 🌟 高亮版星空背景 (修改了透明度和大小) --- */
         .stars-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -40,26 +40,33 @@
             z-index: 0;
             overflow: hidden;
         }
+
         .stars-layer {
             position: absolute;
             top: -50%; left: -50%; width: 200%; height: 200%;
+            /* 增大星星尺寸(2px/3px) 提高透明度(0.8) */
             background-image: 
-                radial-gradient(1px 1px at 10% 10%, rgba(255,255,255,0.3) 50%, transparent),
-                radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.3) 50%, transparent),
-                radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.4) 50%, transparent),
-                radial-gradient(2px 2px at 60% 20%, rgba(157, 78, 221, 0.3) 50%, transparent),
-                radial-gradient(1px 1px at 80% 50%, rgba(255,215,0, 0.3) 50%, transparent);
-            background-size: 400px 400px;
-            animation: moveStars 120s linear infinite;
-            opacity: 0.6;
+                radial-gradient(2px 2px at 10% 10%, rgba(255,255,255,0.8) 50%, transparent),
+                radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.8) 50%, transparent),
+                radial-gradient(3px 3px at 40% 70%, rgba(255,255,255,0.9) 50%, transparent),
+                radial-gradient(3px 3px at 60% 20%, rgba(157, 78, 221, 0.8) 50%, transparent), 
+                radial-gradient(2px 2px at 80% 50%, rgba(255,215,0, 0.8) 50%, transparent);
+            background-size: 400px 400px; 
+            animation: moveStars 100s linear infinite; 
+            opacity: 0.8; /* 整体更亮 */
         }
+
         .stars-layer.layer-2 {
             background-size: 600px 600px;
-            animation-duration: 180s;
+            animation-duration: 150s;
             animation-direction: reverse;
-            opacity: 0.4;
+            opacity: 0.6;
         }
-        @keyframes moveStars { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-200px) rotate(10deg); } }
+
+        @keyframes moveStars {
+            from { transform: translateY(0) rotate(0deg); }
+            to { transform: translateY(-200px) rotate(15deg); }
+        }
 
 
         /* --- 1. 首页 (Landing) --- */
@@ -73,32 +80,28 @@
             z-index: 10;
             position: relative;
             transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-            padding: 20px; /*稍微增加上下内边距*/
+            padding: 20px;
         }
 
-        /* --- Logo 图片容器 --- */
         .logo-container {
-            margin-bottom: 15px; /* 减小与下方SVG的间距 */
+            margin-bottom: 15px;
             animation: popIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
             position: relative;
         }
         .app-logo {
-            width: 110px; /* 稍微调小一点点，让两者更协调 */
+            width: 110px;
             height: auto;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
             animation: logoBreath 4s ease-in-out infinite;
         }
 
-        /* --- SVG 神秘插画容器 (加回来了!) --- */
         .mystic-logo-container {
             width: 130px;
             height: 130px;
             margin-bottom: 25px;
             position: relative;
-            /* 比上面的Logo晚0.2秒出现，更有层次感 */
             animation: popInRotate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
         }
-        /* SVG 内部动画定义 */
         .svg-ring-outer { animation: spinSlow 30s linear infinite; transform-origin: center; }
         .svg-ring-inner { animation: spinSlow 20s linear infinite reverse; transform-origin: center; }
         .svg-core-pulse { animation: corePulse 3s ease-in-out infinite; transform-origin: center; }
@@ -107,12 +110,9 @@
         @keyframes corePulse { 0%, 100% { transform: scale(1); opacity: 0.8; filter: brightness(1); } 50% { transform: scale(1.15); opacity: 1; filter: brightness(1.3); box-shadow: 0 0 20px var(--accent-purple); } }
         @keyframes rayPulse { 0% { opacity: 0.3; transform: scale(0.95) rotate(0deg); } 100% { opacity: 0.7; transform: scale(1.05) rotate(5deg); } }
 
-
-        /* Logo和SVG的入场动画关键帧 */
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.5) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes popInRotate { 0% { opacity: 0; transform: scale(0.5) rotate(-30deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
         @keyframes logoBreath { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); } }
-
 
         h1 {
             font-family: 'Noto Serif SC', serif;
@@ -124,7 +124,6 @@
             color: transparent;
             line-height: 1.2;
             text-shadow: 0 2px 10px rgba(203, 163, 62, 0.3);
-            /* 延迟到两个Logo都出现后再出现 */
             animation: fadeInUp 1s ease-out 0.4s both;
         }
 
@@ -153,7 +152,7 @@
         @keyframes breathing { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.3); } }
 
         .btn-start {
-            margin-top: 50px; /* 稍微调整间距 */
+            margin-top: 50px;
             padding: 16px 60px;
             background: rgba(157, 78, 221, 0.15);
             border: 1px solid rgba(157, 78, 221, 0.4);
@@ -192,8 +191,6 @@
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-
-        /* --- 2. 抽牌/洗牌容器 (Deck) --- */
         #deck-container {
             display: none;
             position: fixed;
@@ -204,7 +201,6 @@
             pointer-events: none;
         }
 
-        /* 卡片通用样式 */
         .card {
             width: var(--card-width-desktop);
             height: calc(var(--card-width-desktop) * var(--card-ratio));
@@ -224,44 +220,20 @@
             transform-style: preserve-3d;
             transition: transform 0.8s;
         }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
 
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        /* 牌背 */
-        .card-back {
+        .card-back, .card-front {
             position: absolute;
             width: 100%; height: 100%;
             backface-visibility: hidden;
-            background: #151520;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-        .card-back img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
-
-        /* 牌面 */
-        .card-front {
-            position: absolute;
-            width: 100%; height: 100%;
-            backface-visibility: hidden;
-            transform: rotateY(180deg);
-            background: #000;
             border-radius: 10px;
             overflow: hidden;
         }
+        .card-back { background: #151520; border: 1px solid #333; }
+        .card-front { transform: rotateY(180deg); background: #000; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-back img { width: 100%; height: 100%; object-fit: cover; }
 
-        .card-img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* --- 3. 结果页 (Result) --- */
         #result-screen {
             display: none;
             width: 100%;
@@ -302,7 +274,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* --- 4. 详情弹窗 (Detail Modal) --- */
         #detail-modal {
             display: none;
             position: fixed;
@@ -316,247 +287,44 @@
             padding: 20px;
             box-sizing: border-box;
         }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .detail-content {
-            position: relative;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .detail-img {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(157, 78, 221, 0.4);
-            border: 2px solid #333;
-        }
-
-        .detail-close {
-            position: absolute;
-            top: -50px; right: 0;
-            color: #fff;
-            font-size: 2rem;
-            cursor: pointer;
-            background: rgba(255,255,255,0.1);
-            width: 40px; height: 40px;
-            line-height: 36px;
-            text-align: center;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
+        .detail-content { position: relative; max-width: 500px; width: 100%; text-align: center; }
+        .detail-img { width: 100%; border-radius: 12px; box-shadow: 0 0 30px rgba(157, 78, 221, 0.4); border: 2px solid #333; }
+        .detail-close { position: absolute; top: -50px; right: 0; color: #fff; font-size: 2rem; cursor: pointer; background: rgba(255,255,255,0.1); width: 40px; height: 40px; line-height: 36px; text-align: center; border-radius: 50%; transition: 0.3s; }
         .detail-close:hover { background: rgba(255,255,255,0.2); }
+        .btn-detail-link { display: inline-block; margin-top: 25px; padding: 12px 45px; background: var(--accent-purple); color: #fff; text-decoration: none; border-radius: 30px; font-weight: bold; box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4); transition: 0.3s; letter-spacing: 1px; }
+        .btn-detail-link:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(157, 78, 221, 0.7); background: #b06ce0; }
 
-        .btn-detail-link {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 12px 45px;
-            background: var(--accent-purple);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
-            transition: 0.3s;
-            letter-spacing: 1px;
-        }
-        .btn-detail-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(157, 78, 221, 0.7);
-            background: #b06ce0;
-        }
+        .action-bar { display: flex; gap: 20px; margin-top: auto; padding-bottom: 20px; }
+        .btn-outline { padding: 12px 35px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #ddd; border-radius: 30px; cursor: pointer; font-family: 'Noto Sans SC', sans-serif; transition: 0.3s; backdrop-filter: blur(5px); }
+        .btn-outline:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
 
-        /* --- 底部按钮区 --- */
-        .action-bar {
-            display: flex;
-            gap: 20px;
-            margin-top: auto;
-            padding-bottom: 20px;
-        }
-
-        .btn-outline {
-            padding: 12px 35px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(0,0,0,0.3);
-            color: #ddd;
-            border-radius: 30px;
-            cursor: pointer;
-            font-family: 'Noto Sans SC', sans-serif;
-            transition: 0.3s;
-            backdrop-filter: blur(5px);
-        }
-        .btn-outline:hover {
-            border-color: #fff;
-            color: #fff;
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
-        }
-
-        /* --- 5. 全量图鉴 (Report Modal) --- */
-        #report-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 15, 0.98);
-            z-index: 150;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .report-header {
-            max-width: 600px;
-            margin: 10px auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 15px;
-        }
-
-        .report-title-main {
-            font-family:'Noto Serif SC'; 
-            font-size: 1.2rem;
-            color:#fff; 
-            margin: 0;
-        }
-
-        .btn-share-icon {
-            background: var(--accent-purple);
-            color: #fff;
-            border: none;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(157, 78, 221, 0.3);
-        }
+        #report-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.98); z-index: 150; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .report-header { max-width: 600px; margin: 10px auto; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .report-title-main { font-family:'Noto Serif SC'; font-size: 1.2rem; color:#fff; margin: 0; }
+        .btn-share-icon { background: var(--accent-purple); color: #fff; border: none; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.3s; box-shadow: 0 4px 10px rgba(157, 78, 221, 0.3); }
         .btn-share-icon:hover { background: #b06ce0; transform: translateY(-1px); }
-
-        .report-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 600px;
-            margin: 30px auto;
-        }
+        .report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 600px; margin: 30px auto; }
         .report-item { text-align: center; transition: 0.3s; }
         .report-item:hover { transform: translateY(-3px); }
-        .report-img {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-            aspect-ratio: 1 / 1.618;
-            object-fit: cover;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+        .report-img { width: 100%; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); aspect-ratio: 1 / 1.618; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
         .report-title { font-size: 0.75rem; color: #aaa; margin-top: 5px; letter-spacing: 1px; }
-
-        .close-btn-inline {
-            font-size: 1.8rem;
-            color: #aaa;
-            cursor: pointer;
-            line-height: 1;
-            padding: 5px;
-            transition: 0.3s;
-        }
+        .close-btn-inline { font-size: 1.8rem; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: 0.3s; }
         .close-btn-inline:hover { color: #fff; }
 
-        /* --- 6. 分享弹窗 (Share Modal) --- */
-        #share-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.96);
-            z-index: 300;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
+        #share-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 300; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.3s; padding: 20px; box-sizing: border-box; }
         @keyframes fadeIn { from {opacity:0} to {opacity:1} }
-
-        .share-content {
-            position: relative;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .share-poster {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid #333;
-        }
-
-        .share-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 25px;
-        }
-
-        .btn-share-action {
-            flex: 1;
-            padding: 14px 0;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: 0.3s;
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-share-action:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: #fff;
-            transform: translateY(-2px);
-        }
-        .btn-primary {
-            background: var(--accent-purple);
-            border-color: var(--accent-purple);
-            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3);
-        }
-        .btn-primary:hover {
-            background: #b06ce0;
-            border-color: #b06ce0;
-             box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
-        }
-
-        .share-close {
-            position: absolute;
-            top: -50px; right: 0;
-            font-size: 2rem;
-            color: #fff;
-            cursor: pointer;
-            background: rgba(255,255,255,0.1);
-            width: 40px; height: 40px;
-            line-height: 36px;
-            text-align: center;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
+        .share-content { position: relative; max-width: 400px; width: 100%; text-align: center; }
+        .share-poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #333; }
+        .share-actions { display: flex; gap: 15px; justify-content: center; margin-top: 25px; }
+        .btn-share-action { flex: 1; padding: 14px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 10px; cursor: pointer; font-size: 0.95rem; transition: 0.3s; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-share-action:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-2px); }
+        .btn-primary { background: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3); }
+        .btn-primary:hover { background: #b06ce0; border-color: #b06ce0; box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5); }
+        .share-close { position: absolute; top: -50px; right: 0; font-size: 2rem; color: #fff; cursor: pointer; background: rgba(255,255,255,0.1); width: 40px; height: 40px; line-height: 36px; text-align: center; border-radius: 50%; transition: 0.3s; }
         .share-close:hover { background: rgba(255,255,255,0.2); }
 
-        /* --- 移动端适配 --- */
         @media (max-width: 768px) {
             h1 { font-size: 2.4rem; }
             .main-subtitle { font-size: 1.05rem; padding: 0 10px; line-height: 1.5; }
@@ -616,11 +384,8 @@
 
     <div id="result-screen">
         <h2 style="font-family: 'Noto Serif SC'; font-weight: normal; margin-bottom: 30px; color: #ccc; letter-spacing: 3px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">2026 预言牌阵</h2>
-        
         <p style="color: rgba(255,255,255,0.5); font-size:0.85rem; margin-bottom:30px; letter-spacing: 1px;">点击卡牌翻阅你的未来启示</p>
-
         <div class="result-cards-container" id="result-cards-area"></div>
-
         <div class="action-bar">
             <button class="btn-outline" onclick="resetDraw()">↺ 重新抽牌</button>
             <button class="btn-outline" style="border-color: var(--accent-purple); color: var(--accent-purple); background: rgba(157, 78, 221, 0.1);" onclick="openReport()">⊞ 全量图鉴</button>
@@ -653,7 +418,6 @@
         <div class="share-content">
             <div class="share-close" onclick="closeShare()">×</div>
             <img id="share-poster-img" src="" class="share-poster">
-            
             <div class="share-actions">
                 <button class="btn-share-action" onclick="copyLink()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5 7.5l4-4a5 5 0 0 0-7.5-7.5"/><path d="M14 11a5 5 0 0 0-7.5-7.5l-4 4a5 5 0 0 0 7.5 7.5"/></svg>
@@ -669,12 +433,9 @@
     </div>
 
     <script>
-        // --- 核心配置 ---
-        
         const cardBackImg = "images/card_back.jpg"; 
         const sharePosterImg = "images/share_poster.jpg";
 
-        // 3. 塔罗数据 (真随机模式)
         const tarotData = [
             { id: 1, title: "黄金天花板", img: "images/card_01.jpg", url: "https://www.jin10.com/topic/gold" },
             { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://www.jin10.com" },
@@ -690,24 +451,19 @@
             { id: 12, title: "世界杯夺冠", img: "images/card_12.jpg", url: "https://www.jin10.com" }
         ];
 
-        // --- DOM 元素 ---
         const landingScreen = document.getElementById('landing-screen');
         const deckContainer = document.getElementById('deck-container');
         const resultScreen = document.getElementById('result-screen');
         const resultArea = document.getElementById('result-cards-area');
-        
         const reportModal = document.getElementById('report-modal');
         const reportGrid = document.getElementById('report-grid-area');
-        
         const detailModal = document.getElementById('detail-modal');
         const detailImgEl = document.getElementById('detail-img-el');
         const detailBtnEl = document.getElementById('detail-btn-el');
-
         const shareModal = document.getElementById('share-modal');
         const sharePosterEl = document.getElementById('share-poster-img');
         const copyTip = document.getElementById('copy-tip');
 
-        // 生成卡片HTML
         function getCardInnerHTML(data) {
             return `
                 <div class="card-inner">
@@ -722,7 +478,6 @@
             `;
         }
 
-        // 1. 开始流程
         function startSequence() {
             landingScreen.style.opacity = '0';
             setTimeout(() => {
@@ -731,7 +486,6 @@
             }, 800);
         }
 
-        // 2. 重新抽取
         function resetDraw() {
             resultScreen.style.opacity = '0';
             setTimeout(() => {
@@ -740,11 +494,9 @@
             }, 500);
         }
 
-        // 3. 洗牌动画
         function runShuffleAnimation() {
             deckContainer.style.display = 'block'; 
             deckContainer.innerHTML = '';
-            
             for(let i=0; i<12; i++) {
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -752,11 +504,9 @@
                 card.innerHTML = getCardInnerHTML({img:'', title:''}); 
                 deckContainer.appendChild(card);
             }
-
             setTimeout(() => {
                 const cards = deckContainer.querySelectorAll('.card');
                 const radius = window.innerWidth < 600 ? 110 : 160; 
-
                 cards.forEach((card, index) => {
                     const angle = (index / 12) * 360; 
                     const x = Math.cos(angle * Math.PI / 180) * radius;
@@ -764,33 +514,26 @@
                     card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${angle + 90}deg) scale(1.05)`;
                     card.style.boxShadow = '0 15px 40px rgba(0,0,0,0.6)';
                 });
-
                 setTimeout(() => {
                     cards.forEach(card => {
                         card.style.transform = `translate(-50%, -50%) rotate(0deg) scale(1)`;
                         card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
                     });
-
                     setTimeout(() => {
                         deckContainer.style.display = 'none';
                         revealResults();
                     }, 800); 
-
                 }, 1200); 
-
             }, 100);
         }
 
-        // 4. 展示结果 (真随机)
         function revealResults() {
             resultScreen.style.display = 'flex';
             setTimeout(() => { resultScreen.style.opacity = '1'; }, 50);
             resultArea.innerHTML = '';
-            
             const indices = Array.from({length: 12}, (_, i) => i);
             indices.sort(() => Math.random() - 0.5);
             const selectedIndices = indices.slice(0, 3);
-
             selectedIndices.forEach((idx, i) => {
                 const data = tarotData[idx];
                 const wrapper = document.createElement('div');
@@ -799,9 +542,7 @@
                 card.className = 'card';
                 const randomTilt = (Math.random() - 0.5) * 6;
                 card.style.transform = `rotate(${randomTilt}deg)`;
-
                 card.innerHTML = getCardInnerHTML(data);
-                
                 card.onclick = function() {
                     if (this.classList.contains('flipped')) {
                         openDetail(data);
@@ -809,12 +550,9 @@
                         this.classList.add('flipped');
                         this.style.transform = `rotate(0deg) scale(1.02)`;
                         this.style.zIndex = 10;
-                        setTimeout(() => {
-                            openDetail(data);
-                        }, 600);
+                        setTimeout(() => { openDetail(data); }, 600);
                     }
                 };
-
                 wrapper.appendChild(card);
                 wrapper.style.opacity = 0;
                 wrapper.style.transform = 'translateY(30px)';
@@ -823,12 +561,10 @@
                      wrapper.style.opacity = 1;
                      wrapper.style.transform = 'translateY(0)';
                 }, i * 150);
-
                 resultArea.appendChild(wrapper);
             });
         }
 
-        // 5. 详情页
         function openDetail(data) {
             detailImgEl.src = data.img; 
             detailBtnEl.href = data.url;
@@ -844,7 +580,6 @@
             });
         }
 
-        // 6. 全量图鉴 & 分享功能
         function openReport() {
             reportModal.style.display = 'block';
             reportGrid.innerHTML = '';
