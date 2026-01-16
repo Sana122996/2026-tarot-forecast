@@ -14,6 +14,7 @@
             --bg-deep: #0e0e12;
             --text-color: #ffffff;
             --accent-purple: #9d4edd;
+            --accent-gold: #ffd700; 
             --card-ratio: 1.618; 
             --card-width-mobile: 130px; 
             --card-width-desktop: 180px;
@@ -23,12 +24,43 @@
             margin: 0;
             padding: 0;
             background-color: var(--bg-deep);
-            background-image: radial-gradient(circle at 50% 30%, #1a1a2e 0%, #000 100%);
+            background-image: radial-gradient(circle at 50% 40%, #1a1a2e 0%, #050508 100%);
             font-family: 'Noto Sans SC', sans-serif;
             color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
+
+        /* --- 动态星空背景 --- */
+        .stars-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .stars-layer {
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background-image: 
+                radial-gradient(1px 1px at 10% 10%, rgba(255,255,255,0.3) 50%, transparent),
+                radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.3) 50%, transparent),
+                radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.4) 50%, transparent),
+                radial-gradient(2px 2px at 60% 20%, rgba(157, 78, 221, 0.3) 50%, transparent),
+                radial-gradient(1px 1px at 80% 50%, rgba(255,215,0, 0.3) 50%, transparent);
+            background-size: 400px 400px;
+            animation: moveStars 120s linear infinite;
+            opacity: 0.6;
+        }
+        .stars-layer.layer-2 {
+            background-size: 600px 600px;
+            animation-duration: 180s;
+            animation-direction: reverse;
+            opacity: 0.4;
+        }
+        @keyframes moveStars { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-200px) rotate(10deg); } }
+
 
         /* --- 1. 首页 (Landing) --- */
         #landing-screen {
@@ -40,61 +72,126 @@
             text-align: center;
             z-index: 10;
             position: relative;
-            transition: opacity 0.5s;
-            padding: 0 20px;
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 20px; /*稍微增加上下内边距*/
         }
 
-        .logo-placeholder { font-size: 3rem; margin-bottom: 10px; }
+        /* --- Logo 图片容器 --- */
+        .logo-container {
+            margin-bottom: 15px; /* 减小与下方SVG的间距 */
+            animation: popIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            position: relative;
+        }
+        .app-logo {
+            width: 110px; /* 稍微调小一点点，让两者更协调 */
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+            animation: logoBreath 4s ease-in-out infinite;
+        }
+
+        /* --- SVG 神秘插画容器 (加回来了!) --- */
+        .mystic-logo-container {
+            width: 130px;
+            height: 130px;
+            margin-bottom: 25px;
+            position: relative;
+            /* 比上面的Logo晚0.2秒出现，更有层次感 */
+            animation: popInRotate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+        /* SVG 内部动画定义 */
+        .svg-ring-outer { animation: spinSlow 30s linear infinite; transform-origin: center; }
+        .svg-ring-inner { animation: spinSlow 20s linear infinite reverse; transform-origin: center; }
+        .svg-core-pulse { animation: corePulse 3s ease-in-out infinite; transform-origin: center; }
+        .svg-rays { animation: rayPulse 4s ease-in-out infinite alternate; transform-origin: center; }
+        @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes corePulse { 0%, 100% { transform: scale(1); opacity: 0.8; filter: brightness(1); } 50% { transform: scale(1.15); opacity: 1; filter: brightness(1.3); box-shadow: 0 0 20px var(--accent-purple); } }
+        @keyframes rayPulse { 0% { opacity: 0.3; transform: scale(0.95) rotate(0deg); } 100% { opacity: 0.7; transform: scale(1.05) rotate(5deg); } }
+
+
+        /* Logo和SVG的入场动画关键帧 */
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.5) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes popInRotate { 0% { opacity: 0; transform: scale(0.5) rotate(-30deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
+        @keyframes logoBreath { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); } }
+
 
         h1 {
             font-family: 'Noto Serif SC', serif;
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin: 10px 0;
-            letter-spacing: 2px;
-            background: linear-gradient(to bottom, #fff, #ccc);
+            letter-spacing: 4px;
+            background: linear-gradient(to bottom, #ffffff 10%, #e2c474 60%, #cba33e 100%);
             -webkit-background-clip: text;
             color: transparent;
             line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(203, 163, 62, 0.3);
+            /* 延迟到两个Logo都出现后再出现 */
+            animation: fadeInUp 1s ease-out 0.4s both;
         }
 
         .credit-text {
             font-family: 'Noto Sans SC', sans-serif;
-            font-size: 0.8rem;
-            color: #666;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
-            background: rgba(255,255,255,0.05);
-            padding: 4px 10px;
-            border-radius: 4px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 2px;
+            margin-bottom: 35px;
+            background: rgba(255,255,255,0.03);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            animation: fadeInUp 1s ease-out 0.6s both;
         }
 
         .main-subtitle {
             font-family: 'Noto Serif SC', serif;
-            font-size: 1.1rem;
-            color: #ddd;
-            letter-spacing: 1px;
+            font-size: 1.15rem;
+            color: #e0e0e0;
+            letter-spacing: 2px;
             margin: 0;
             font-weight: 300;
+            animation: breathing 4s ease-in-out infinite, fadeInUp 1s ease-out 0.8s both;
         }
+        @keyframes breathing { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.3); } }
 
         .btn-start {
-            margin-top: 50px;
-            padding: 15px 50px;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.05);
+            margin-top: 50px; /* 稍微调整间距 */
+            padding: 16px 60px;
+            background: rgba(157, 78, 221, 0.15);
+            border: 1px solid rgba(157, 78, 221, 0.4);
             color: #fff;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
+            font-size: 1.15rem;
+            letter-spacing: 3px;
             cursor: pointer;
             border-radius: 50px;
-            transition: 0.3s;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             font-family: 'Noto Sans SC', sans-serif;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2), inset 0 0 10px rgba(157, 78, 221, 0.2);
+            backdrop-filter: blur(5px);
+            animation: fadeInUp 1s ease-out 1.0s both;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .btn-start::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg) translate(-100%, -100%);
+            transition: transform 0.6s;
+        }
+
         .btn-start:hover {
             background: var(--accent-purple);
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 15px var(--accent-purple);
+            border-color: #c77dff;
+            box-shadow: 0 6px 30px rgba(157, 78, 221, 0.6), inset 0 0 15px rgba(255,255,255,0.3);
+            transform: translateY(-3px);
         }
+        .btn-start:hover::after {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
 
         /* --- 2. 抽牌/洗牌容器 (Deck) --- */
         #deck-container {
@@ -176,6 +273,8 @@
             overflow-y: auto; 
             opacity: 0;
             transition: opacity 0.5s;
+            position: relative;
+            z-index: 10;
         }
 
         .result-cards-container {
@@ -248,12 +347,14 @@
             line-height: 36px;
             text-align: center;
             border-radius: 50%;
+            transition: 0.3s;
         }
+        .detail-close:hover { background: rgba(255,255,255,0.2); }
 
         .btn-detail-link {
             display: inline-block;
-            margin-top: 20px;
-            padding: 12px 40px;
+            margin-top: 25px;
+            padding: 12px 45px;
             background: var(--accent-purple);
             color: #fff;
             text-decoration: none;
@@ -261,10 +362,12 @@
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
             transition: 0.3s;
+            letter-spacing: 1px;
         }
         .btn-detail-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(157, 78, 221, 0.6);
+            box-shadow: 0 8px 25px rgba(157, 78, 221, 0.7);
+            background: #b06ce0;
         }
 
         /* --- 底部按钮区 --- */
@@ -277,18 +380,20 @@
 
         .btn-outline {
             padding: 12px 35px;
-            border: 1px solid #666;
+            border: 1px solid rgba(255,255,255,0.2);
             background: rgba(0,0,0,0.3);
             color: #ddd;
             border-radius: 30px;
             cursor: pointer;
             font-family: 'Noto Sans SC', sans-serif;
             transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
         .btn-outline:hover {
             border-color: #fff;
             color: #fff;
             background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
         }
 
         /* --- 5. 全量图鉴 (Report Modal) --- */
@@ -303,7 +408,6 @@
             box-sizing: border-box;
         }
 
-        /* 图鉴头部：包含标题、分享按钮、关闭按钮 */
         .report-header {
             max-width: 600px;
             margin: 10px auto;
@@ -321,51 +425,58 @@
             margin: 0;
         }
 
-        /* 分享按钮 (图鉴内) */
         .btn-share-icon {
             background: var(--accent-purple);
             color: #fff;
             border: none;
-            padding: 5px 15px;
+            padding: 6px 18px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(157, 78, 221, 0.3);
         }
+        .btn-share-icon:hover { background: #b06ce0; transform: translateY(-1px); }
 
         .report-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
             max-width: 600px;
-            margin: 20px auto;
+            margin: 30px auto;
         }
-        .report-item { text-align: center; }
+        .report-item { text-align: center; transition: 0.3s; }
+        .report-item:hover { transform: translateY(-3px); }
         .report-img {
             width: 100%;
-            border-radius: 6px;
-            margin-bottom: 5px;
-            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
             aspect-ratio: 1 / 1.618;
             object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .report-title { font-size: 0.75rem; color: #888; margin-top: 5px; }
+        .report-title { font-size: 0.75rem; color: #aaa; margin-top: 5px; letter-spacing: 1px; }
 
         .close-btn-inline {
             font-size: 1.8rem;
             color: #aaa;
             cursor: pointer;
             line-height: 1;
+            padding: 5px;
+            transition: 0.3s;
         }
+        .close-btn-inline:hover { color: #fff; }
 
         /* --- 6. 分享弹窗 (Share Modal) --- */
         #share-modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.96);
             z-index: 300;
             flex-direction: column;
             align-items: center;
@@ -379,15 +490,15 @@
 
         .share-content {
             position: relative;
-            max-width: 400px; /* 海报宽度 */
+            max-width: 400px;
             width: 100%;
             text-align: center;
         }
 
         .share-poster {
             width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 2px solid #333;
         }
 
@@ -395,54 +506,106 @@
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .btn-share-action {
             flex: 1;
-            padding: 12px 0;
-            background: #222;
-            border: 1px solid #555;
+            padding: 14px 0;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.2s;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         .btn-share-action:hover {
-            background: #333;
+            background: rgba(255,255,255,0.1);
             border-color: #fff;
+            transform: translateY(-2px);
         }
         .btn-primary {
             background: var(--accent-purple);
             border-color: var(--accent-purple);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3);
         }
         .btn-primary:hover {
-            background: #8e44ad;
+            background: #b06ce0;
+            border-color: #b06ce0;
+             box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5);
         }
 
         .share-close {
             position: absolute;
-            top: -40px; right: 0;
+            top: -50px; right: 0;
             font-size: 2rem;
             color: #fff;
             cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            width: 40px; height: 40px;
+            line-height: 36px;
+            text-align: center;
+            border-radius: 50%;
+            transition: 0.3s;
         }
+        .share-close:hover { background: rgba(255,255,255,0.2); }
 
         /* --- 移动端适配 --- */
         @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            .main-subtitle { font-size: 1rem; padding: 0 10px; line-height: 1.5; }
+            h1 { font-size: 2.4rem; }
+            .main-subtitle { font-size: 1.05rem; padding: 0 10px; line-height: 1.5; }
             :root { --card-width-desktop: var(--card-width-mobile); }
             .result-cards-container { gap: 10px; }
             .btn-outline { padding: 10px 25px; font-size: 0.9rem; }
+            .mystic-logo-container { width: 120px; height: 120px; }
+            .app-logo { width: 100px; }
         }
     </style>
 </head>
 <body>
+    
+    <div class="stars-bg">
+        <div class="stars-layer"></div>
+        <div class="stars-layer layer-2"></div>
+    </div>
 
     <div id="landing-screen">
-        <div class="logo-placeholder">🔮</div>
+        <div class="logo-container">
+            <img src="images/logo.png" class="app-logo" onerror="this.style.display='none';">
+        </div>
+
+        <div class="mystic-logo-container">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#cba33e;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="grad-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#9d4edd;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3c096c;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <g class="svg-rays" stroke="url(#grad-purple)" stroke-width="2" opacity="0.5">
+                    <line x1="100" y1="10" x2="100" y2="30" /><line x1="100" y1="190" x2="100" y2="170" /><line x1="10" y1="100" x2="30" y2="100" /><line x1="190" y1="100" x2="170" y2="100" /><line x1="36.4" y1="36.4" x2="50.5" y2="50.5" /><line x1="163.6" y1="163.6" x2="149.5" y2="149.5" /><line x1="36.4" y1="163.6" x2="50.5" y2="149.5" /><line x1="163.6" y1="36.4" x2="149.5" y2="50.5" />
+                </g>
+                <circle class="svg-ring-outer" cx="100" cy="100" r="70" fill="none" stroke="url(#grad-purple)" stroke-width="1.5" stroke-dasharray="10, 20, 40, 30" opacity="0.6" />
+                <circle class="svg-ring-inner" cx="100" cy="100" r="55" fill="none" stroke="url(#grad-gold)" stroke-width="1" stroke-dasharray="50, 50" opacity="0.4" />
+                <g class="svg-core-pulse" transform-origin="center">
+                    <path d="M100 40 L115 85 L160 100 L115 115 L100 160 L85 115 L40 100 L85 85 Z" fill="url(#grad-gold)" opacity="0.3" />
+                    <path d="M100 75 C120 75, 140 85, 140 100 C140 115, 120 125, 100 125 C80 125, 60 115, 60 100 C60 85, 80 75, 100 75 Z" fill="none" stroke="url(#grad-gold)" stroke-width="2" />
+                    <circle cx="100" cy="100" r="12" fill="url(#grad-purple)" />
+                    <circle cx="100" cy="100" r="6" fill="#fff" filter="blur(1px)" />
+                </g>
+            </svg>
+        </div>
+
         <h1>2026 全球展望</h1>
         <div class="credit-text">金十数据APP独家制作</div>
         <p class="main-subtitle">新的一年，你有哪些期待和疑问？</p>
@@ -452,15 +615,15 @@
     <div id="deck-container"></div>
 
     <div id="result-screen">
-        <h2 style="font-family: 'Noto Serif SC'; font-weight: normal; margin-bottom: 20px; color: #aaa; letter-spacing: 2px;">2026 预言牌阵</h2>
+        <h2 style="font-family: 'Noto Serif SC'; font-weight: normal; margin-bottom: 30px; color: #ccc; letter-spacing: 3px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">2026 预言牌阵</h2>
         
-        <p style="color:#666; font-size:0.8rem; margin-bottom:20px;">点击卡牌查看预言</p>
+        <p style="color: rgba(255,255,255,0.5); font-size:0.85rem; margin-bottom:30px; letter-spacing: 1px;">点击卡牌翻阅你的未来启示</p>
 
         <div class="result-cards-container" id="result-cards-area"></div>
 
         <div class="action-bar">
-            <button class="btn-outline" onclick="resetDraw()">重新抽牌</button>
-            <button class="btn-outline" style="border-color: var(--accent-purple); color: var(--accent-purple);" onclick="openReport()">全量图鉴</button>
+            <button class="btn-outline" onclick="resetDraw()">↺ 重新抽牌</button>
+            <button class="btn-outline" style="border-color: var(--accent-purple); color: var(--accent-purple); background: rgba(157, 78, 221, 0.1);" onclick="openReport()">⊞ 全量图鉴</button>
         </div>
     </div>
 
@@ -468,7 +631,7 @@
         <div class="detail-content">
             <div class="detail-close" onclick="closeDetail()">×</div>
             <img id="detail-img-el" src="" class="detail-img">
-            <a id="detail-btn-el" href="#" target="_blank" class="btn-detail-link">查看详情</a>
+            <a id="detail-btn-el" href="#" target="_blank" class="btn-detail-link">查看深度解读 ➔</a>
         </div>
     </div>
 
@@ -477,7 +640,8 @@
             <h3 class="report-title-main">2026 猜想全图鉴</h3>
             <div style="display:flex; align-items:center; gap:15px;">
                 <button class="btn-share-icon" onclick="openShare()">
-                    📤 分享
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                    分享
                 </button>
                 <div class="close-btn-inline" onclick="closeReport()">×</div>
             </div>
@@ -491,23 +655,26 @@
             <img id="share-poster-img" src="" class="share-poster">
             
             <div class="share-actions">
-                <button class="btn-share-action" onclick="copyLink()">🔗 复制链接</button>
-                <button class="btn-share-action btn-primary" onclick="saveImage()">⬇️ 保存图片</button>
+                <button class="btn-share-action" onclick="copyLink()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5 7.5l4-4a5 5 0 0 0-7.5-7.5"/><path d="M14 11a5 5 0 0 0-7.5-7.5l-4 4a5 5 0 0 0 7.5 7.5"/></svg>
+                    复制链接
+                </button>
+                <button class="btn-share-action btn-primary" onclick="saveImage()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    保存海报
+                </button>
             </div>
-            <p id="copy-tip" style="color:#0f0; font-size:0.8rem; margin-top:10px; opacity:0; transition:opacity 0.3s;">复制成功！</p>
+            <p id="copy-tip" style="color:#4cd137; font-size:0.9rem; margin-top:15px; opacity:0; transition:opacity 0.3s; font-weight:bold;">✨ 链接已复制，快去分享吧！</p>
         </div>
     </div>
 
     <script>
         // --- 核心配置 ---
         
-        // 1. 牌背图片
         const cardBackImg = "images/card_back.jpg"; 
-        
-        // 2. 分享海报图片
         const sharePosterImg = "images/share_poster.jpg";
 
-        // 3. 塔罗数据
+        // 3. 塔罗数据 (真随机模式)
         const tarotData = [
             { id: 1, title: "黄金天花板", img: "images/card_01.jpg", url: "https://www.jin10.com/topic/gold" },
             { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://www.jin10.com" },
@@ -545,11 +712,11 @@
             return `
                 <div class="card-inner">
                     <div class="card-back">
-                        <img src="${cardBackImg}" onerror="this.parentElement.innerHTML='<div style=\\'color:#fff;display:flex;justify-content:center;align-items:center;height:100%;font-size:12px;\\'>背面缺失</div>'">
+                        <img src="${cardBackImg}" onerror="this.parentElement.innerHTML='<div style=\\'color:rgba(255,255,255,0.5);display:flex;justify-content:center;align-items:center;height:100%;font-size:12px;\\'>背面缺失</div>'">
                     </div>
                     <div class="card-front">
                         <img src="${data.img}" class="card-img" alt="${data.title}" 
-                             onerror="this.parentElement.style.background='#333'; this.parentElement.innerHTML='<div style=\\'color:#ff6b6b;padding:10px;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;text-align:center;font-size:12px;\\'>❌ 找不到:<br>${data.img}</div>'">
+                             onerror="this.parentElement.style.background='#2a2a3a'; this.parentElement.innerHTML='<div style=\\'color:#ff6b6b;padding:10px;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;text-align:center;font-size:12px;\\'>❌ 找不到图片<br>${data.img}</div>'">
                     </div>
                 </div>
             `;
@@ -561,7 +728,7 @@
             setTimeout(() => {
                 landingScreen.style.display = 'none';
                 runShuffleAnimation();
-            }, 500);
+            }, 800);
         }
 
         // 2. 重新抽取
@@ -588,18 +755,20 @@
 
             setTimeout(() => {
                 const cards = deckContainer.querySelectorAll('.card');
-                const radius = window.innerWidth < 600 ? 100 : 150; 
+                const radius = window.innerWidth < 600 ? 110 : 160; 
 
                 cards.forEach((card, index) => {
                     const angle = (index / 12) * 360; 
                     const x = Math.cos(angle * Math.PI / 180) * radius;
                     const y = Math.sin(angle * Math.PI / 180) * radius;
-                    card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${angle + 90}deg)`;
+                    card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${angle + 90}deg) scale(1.05)`;
+                    card.style.boxShadow = '0 15px 40px rgba(0,0,0,0.6)';
                 });
 
                 setTimeout(() => {
                     cards.forEach(card => {
-                        card.style.transform = `translate(-50%, -50%) rotate(0deg)`;
+                        card.style.transform = `translate(-50%, -50%) rotate(0deg) scale(1)`;
+                        card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
                     });
 
                     setTimeout(() => {
@@ -607,7 +776,7 @@
                         revealResults();
                     }, 800); 
 
-                }, 1000); 
+                }, 1200); 
 
             }, 100);
         }
@@ -618,7 +787,6 @@
             setTimeout(() => { resultScreen.style.opacity = '1'; }, 50);
             resultArea.innerHTML = '';
             
-            // 随机抽3张
             const indices = Array.from({length: 12}, (_, i) => i);
             indices.sort(() => Math.random() - 0.5);
             const selectedIndices = indices.slice(0, 3);
@@ -629,6 +797,9 @@
                 wrapper.className = 'result-card-wrapper';
                 const card = document.createElement('div');
                 card.className = 'card';
+                const randomTilt = (Math.random() - 0.5) * 6;
+                card.style.transform = `rotate(${randomTilt}deg)`;
+
                 card.innerHTML = getCardInnerHTML(data);
                 
                 card.onclick = function() {
@@ -636,6 +807,8 @@
                         openDetail(data);
                     } else {
                         this.classList.add('flipped');
+                        this.style.transform = `rotate(0deg) scale(1.02)`;
+                        this.style.zIndex = 10;
                         setTimeout(() => {
                             openDetail(data);
                         }, 600);
@@ -643,6 +816,14 @@
                 };
 
                 wrapper.appendChild(card);
+                wrapper.style.opacity = 0;
+                wrapper.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                     wrapper.style.transition = '0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                     wrapper.style.opacity = 1;
+                     wrapper.style.transform = 'translateY(0)';
+                }, i * 150);
+
                 resultArea.appendChild(wrapper);
             });
         }
@@ -656,6 +837,11 @@
 
         function closeDetail() {
             detailModal.style.display = 'none';
+            const cards = document.querySelectorAll('.result-card-wrapper .card');
+            cards.forEach(card => {
+                card.style.transform = card.style.transform.replace(' scale(1.02)', '');
+                card.style.zIndex = 1;
+            });
         }
 
         // 6. 全量图鉴 & 分享功能
@@ -666,7 +852,7 @@
                 const item = document.createElement('div');
                 item.className = 'report-item';
                 item.innerHTML = `
-                    <img src="${data.img}" class="report-img" onerror="this.parentElement.innerHTML='<div style=\\'color:#ff6b6b;font-size:10px;border:1px solid #333;padding:10px;\\'>缺失</div>'">
+                    <img src="${data.img}" class="report-img" onerror="this.parentElement.innerHTML='<div style=\\'color:rgba(255,255,255,0.5);font-size:10px;border:1px solid rgba(255,255,255,0.1);padding:10px;aspect-ratio:1/1.618;display:flex;align-items:center;justify-content:center;\\'>缺失</div>'">
                     <div class="report-title">${data.title}</div>
                 `;
                 reportGrid.appendChild(item);
@@ -677,7 +863,6 @@
             reportModal.style.display = 'none';
         }
 
-        // 打开分享弹窗
         function openShare() {
             sharePosterEl.src = sharePosterImg;
             shareModal.style.display = 'flex';
@@ -687,22 +872,25 @@
             shareModal.style.display = 'none';
         }
 
-        // 复制链接
         function copyLink() {
             const url = window.location.href;
             navigator.clipboard.writeText(url).then(() => {
                 copyTip.style.opacity = '1';
-                setTimeout(() => { copyTip.style.opacity = '0'; }, 2000);
+                setTimeout(() => { copyTip.style.opacity = '0'; }, 2500);
             }).catch(err => {
                 alert('复制失败，请手动复制浏览器链接');
             });
         }
 
-        // 保存图片 (创建临时链接下载)
         function saveImage() {
+            const isWechat = /MicroMessenger/i.test(navigator.userAgent);
+            if (isWechat) {
+                alert('请长按海报图片进行保存');
+                return;
+            }
             const link = document.createElement('a');
             link.href = sharePosterImg;
-            link.download = '2026_Tarot_Report.jpg';
+            link.download = '2026_Tarot_Forecast_Poster.jpg';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
