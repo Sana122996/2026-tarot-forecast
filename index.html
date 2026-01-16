@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2026 全球展望</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&family=Noto+Serif+SC:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #0e0e12;
+            --text-color: #ffffff;
+            --accent-purple: #9d4edd;
+            --card-ratio: 1.618; 
+            --card-width-mobile: 130px; 
+            --card-width-desktop: 180px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% 30%, #1a1a2e 0%, #000 100%);
+            font-family: 'Noto Sans SC', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- 1. 首页 (Landing) --- */
+        #landing-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            transition: opacity 0.5s;
+            padding: 0 20px;
+        }
+
+        .logo-placeholder { font-size: 3rem; margin-bottom: 10px; }
+
+        h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.8rem;
+            margin: 10px 0;
+            letter-spacing: 2px;
+            background: linear-gradient(to bottom, #fff, #ccc);
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .credit-text {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 0.8rem;
+            color: #666;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .main-subtitle {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            color: #ddd;
+            letter-spacing: 1px;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        .btn-start {
+            margin-top: 50px;
+            padding: 15px 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: 0.3s;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        .btn-start:hover {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        /* --- 2. 抽牌/洗牌容器 (Deck) --- */
+        #deck-container {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%; height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* 卡片通用样式 */
+        .card {
+            width: var(--card-width-desktop);
+            height: calc(var(--card-width-desktop) * var(--card-ratio));
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            perspective: 1000px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s; 
+            cursor: pointer;
+        }
+
+        .card-inner {
+            width: 100%; height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* 牌背 */
+        .card-back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            background: #151520;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        .card-back img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        /* 牌面 */
+        .card-front {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* --- 3. 结果页 (Result) --- */
+        #result-screen {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            padding: 80px 20px 40px 20px;
+            box-sizing: border-box;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto; 
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .result-cards-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; 
+            gap: 20px; 
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 40px; 
+            perspective: 1000px;
+        }
+
+        .result-card-wrapper {
+            position: relative;
+            width: var(--card-width-desktop);
+            height: calc(var(--card-width-desktop) * var(--card-ratio));
+        }
+        
+        .result-card-wrapper .card {
+            position: relative;
+            top: auto; left: auto;
+            transform: none !important;
+            width: 100%; height: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* --- 4. 详情弹窗 (Detail Modal) --- */
+        #detail-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: zoomIn 0.3s ease-out;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .detail-content {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .detail-img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.4);
+            border: 2px solid #333;
+        }
+
+        .detail-close {
+            position: absolute;
+            top: -50px; right: 0;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            width: 40px; height: 40px;
+            line-height: 36px;
+            text-align: center;
+            border-radius: 50%;
+        }
+
+        .btn-detail-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 40px;
+            background: var(--accent-purple);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+            transition: 0.3s;
+        }
+        .btn-detail-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(157, 78, 221, 0.6);
+        }
+
+        /* --- 底部按钮区 --- */
+        .action-bar {
+            display: flex;
+            gap: 20px;
+            margin-top: auto;
+            padding-bottom: 20px;
+        }
+
+        .btn-outline {
+            padding: 12px 35px;
+            border: 1px solid #666;
+            background: rgba(0,0,0,0.3);
+            color: #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Noto Sans SC', sans-serif;
+            transition: 0.3s;
+        }
+        .btn-outline:hover {
+            border-color: #fff;
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* --- 5. 全量图鉴 (Report Modal) --- */
+        #report-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 15, 0.98);
+            z-index: 150;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 图鉴头部：包含标题、分享按钮、关闭按钮 */
+        .report-header {
+            max-width: 600px;
+            margin: 10px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .report-title-main {
+            font-family:'Noto Serif SC'; 
+            font-size: 1.2rem;
+            color:#fff; 
+            margin: 0;
+        }
+
+        /* 分享按钮 (图鉴内) */
+        .btn-share-icon {
+            background: var(--accent-purple);
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .report-item { text-align: center; }
+        .report-img {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            border: 1px solid #333;
+            aspect-ratio: 1 / 1.618;
+            object-fit: cover;
+        }
+        .report-title { font-size: 0.75rem; color: #888; margin-top: 5px; }
+
+        .close-btn-inline {
+            font-size: 1.8rem;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* --- 6. 分享弹窗 (Share Modal) --- */
+        #share-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 300;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+
+        .share-content {
+            position: relative;
+            max-width: 400px; /* 海报宽度 */
+            width: 100%;
+            text-align: center;
+        }
+
+        .share-poster {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border: 2px solid #333;
+        }
+
+        .share-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-share-action {
+            flex: 1;
+            padding: 12px 0;
+            background: #222;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .btn-share-action:hover {
+            background: #333;
+            border-color: #fff;
+        }
+        .btn-primary {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+        .btn-primary:hover {
+            background: #8e44ad;
+        }
+
+        .share-close {
+            position: absolute;
+            top: -40px; right: 0;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* --- 移动端适配 --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .main-subtitle { font-size: 1rem; padding: 0 10px; line-height: 1.5; }
+            :root { --card-width-desktop: var(--card-width-mobile); }
+            .result-cards-container { gap: 10px; }
+            .btn-outline { padding: 10px 25px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="landing-screen">
+        <div class="logo-placeholder">🔮</div>
+        <h1>2026 全球展望</h1>
+        <div class="credit-text">金十数据APP独家制作</div>
+        <p class="main-subtitle">新的一年，你有哪些期待和疑问？</p>
+        <button class="btn-start" onclick="startSequence()">开启抽牌</button>
+    </div>
+
+    <div id="deck-container"></div>
+
+    <div id="result-screen">
+        <h2 style="font-family: 'Noto Serif SC'; font-weight: normal; margin-bottom: 20px; color: #aaa; letter-spacing: 2px;">2026 预言牌阵</h2>
+        
+        <p style="color:#666; font-size:0.8rem; margin-bottom:20px;">点击卡牌查看预言</p>
+
+        <div class="result-cards-container" id="result-cards-area"></div>
+
+        <div class="action-bar">
+            <button class="btn-outline" onclick="resetDraw()">重新抽牌</button>
+            <button class="btn-outline" style="border-color: var(--accent-purple); color: var(--accent-purple);" onclick="openReport()">全量图鉴</button>
+        </div>
+    </div>
+
+    <div id="detail-modal">
+        <div class="detail-content">
+            <div class="detail-close" onclick="closeDetail()">×</div>
+            <img id="detail-img-el" src="" class="detail-img">
+            <a id="detail-btn-el" href="#" target="_blank" class="btn-detail-link">查看详情</a>
+        </div>
+    </div>
+
+    <div id="report-modal">
+        <div class="report-header">
+            <h3 class="report-title-main">2026 猜想全图鉴</h3>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <button class="btn-share-icon" onclick="openShare()">
+                    📤 分享
+                </button>
+                <div class="close-btn-inline" onclick="closeReport()">×</div>
+            </div>
+        </div>
+        <div class="report-grid" id="report-grid-area"></div>
+    </div>
+
+    <div id="share-modal">
+        <div class="share-content">
+            <div class="share-close" onclick="closeShare()">×</div>
+            <img id="share-poster-img" src="" class="share-poster">
+            
+            <div class="share-actions">
+                <button class="btn-share-action" onclick="copyLink()">🔗 复制链接</button>
+                <button class="btn-share-action btn-primary" onclick="saveImage()">⬇️ 保存图片</button>
+            </div>
+            <p id="copy-tip" style="color:#0f0; font-size:0.8rem; margin-top:10px; opacity:0; transition:opacity 0.3s;">复制成功！</p>
+        </div>
+    </div>
+
+    <script>
+        // --- 核心配置 ---
+        
+        // 1. 牌背图片
+        const cardBackImg = "images/card_back.jpg"; 
+        
+        // 2. 分享海报图片
+        const sharePosterImg = "images/share_poster.jpg";
+
+        // 3. 塔罗数据
+        const tarotData = [
+            { id: 1, title: "黄金天花板", img: "images/card_01.jpg", url: "https://www.jin10.com/topic/gold" },
+            { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://www.jin10.com" },
+            { id: 3, title: "AI泡沫", img: "images/card_03.jpg", url: "https://www.jin10.com" },
+            { id: 4, title: "全球变暖", img: "images/card_04.jpg", url: "https://www.jin10.com" },
+            { id: 5, title: "贸易壁垒", img: "images/card_05.jpg", url: "https://www.jin10.com" },
+            { id: 6, title: "美联储降息", img: "images/card_06.jpg", url: "https://www.jin10.com" },
+            { id: 7, title: "无人驾驶", img: "images/card_07.jpg", url: "https://www.jin10.com" },
+            { id: 8, title: "地缘冲突", img: "images/card_08.jpg", url: "https://www.jin10.com" },
+            { id: 9, title: "中期选举", img: "images/card_09.jpg", url: "https://www.jin10.com" },
+            { id: 10, title: "政权交接", img: "images/card_10.jpg", url: "https://www.jin10.com" },
+            { id: 11, title: "复联5好莱坞", img: "images/card_11.jpg", url: "https://www.jin10.com" },
+            { id: 12, title: "世界杯夺冠", img: "images/card_12.jpg", url: "https://www.jin10.com" }
+        ];
+
+        // --- DOM 元素 ---
+        const landingScreen = document.getElementById('landing-screen');
+        const deckContainer = document.getElementById('deck-container');
+        const resultScreen = document.getElementById('result-screen');
+        const resultArea = document.getElementById('result-cards-area');
+        
+        const reportModal = document.getElementById('report-modal');
+        const reportGrid = document.getElementById('report-grid-area');
+        
+        const detailModal = document.getElementById('detail-modal');
+        const detailImgEl = document.getElementById('detail-img-el');
+        const detailBtnEl = document.getElementById('detail-btn-el');
+
+        const shareModal = document.getElementById('share-modal');
+        const sharePosterEl = document.getElementById('share-poster-img');
+        const copyTip = document.getElementById('copy-tip');
+
+        // 生成卡片HTML
+        function getCardInnerHTML(data) {
+            return `
+                <div class="card-inner">
+                    <div class="card-back">
+                        <img src="${cardBackImg}" onerror="this.parentElement.innerHTML='<div style=\\'color:#fff;display:flex;justify-content:center;align-items:center;height:100%;font-size:12px;\\'>背面缺失</div>'">
+                    </div>
+                    <div class="card-front">
+                        <img src="${data.img}" class="card-img" alt="${data.title}" 
+                             onerror="this.parentElement.style.background='#333'; this.parentElement.innerHTML='<div style=\\'color:#ff6b6b;padding:10px;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;text-align:center;font-size:12px;\\'>❌ 找不到:<br>${data.img}</div>'">
+                    </div>
+                </div>
+            `;
+        }
+
+        // 1. 开始流程
+        function startSequence() {
+            landingScreen.style.opacity = '0';
+            setTimeout(() => {
+                landingScreen.style.display = 'none';
+                runShuffleAnimation();
+            }, 500);
+        }
+
+        // 2. 重新抽取
+        function resetDraw() {
+            resultScreen.style.opacity = '0';
+            setTimeout(() => {
+                resultScreen.style.display = 'none';
+                runShuffleAnimation();
+            }, 500);
+        }
+
+        // 3. 洗牌动画
+        function runShuffleAnimation() {
+            deckContainer.style.display = 'block'; 
+            deckContainer.innerHTML = '';
+            
+            for(let i=0; i<12; i++) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.zIndex = i;
+                card.innerHTML = getCardInnerHTML({img:'', title:''}); 
+                deckContainer.appendChild(card);
+            }
+
+            setTimeout(() => {
+                const cards = deckContainer.querySelectorAll('.card');
+                const radius = window.innerWidth < 600 ? 100 : 150; 
+
+                cards.forEach((card, index) => {
+                    const angle = (index / 12) * 360; 
+                    const x = Math.cos(angle * Math.PI / 180) * radius;
+                    const y = Math.sin(angle * Math.PI / 180) * radius;
+                    card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${angle + 90}deg)`;
+                });
+
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        card.style.transform = `translate(-50%, -50%) rotate(0deg)`;
+                    });
+
+                    setTimeout(() => {
+                        deckContainer.style.display = 'none';
+                        revealResults();
+                    }, 800); 
+
+                }, 1000); 
+
+            }, 100);
+        }
+
+        // 4. 展示结果 (真随机)
+        function revealResults() {
+            resultScreen.style.display = 'flex';
+            setTimeout(() => { resultScreen.style.opacity = '1'; }, 50);
+            resultArea.innerHTML = '';
+            
+            // 随机抽3张
+            const indices = Array.from({length: 12}, (_, i) => i);
+            indices.sort(() => Math.random() - 0.5);
+            const selectedIndices = indices.slice(0, 3);
+
+            selectedIndices.forEach((idx, i) => {
+                const data = tarotData[idx];
+                const wrapper = document.createElement('div');
+                wrapper.className = 'result-card-wrapper';
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = getCardInnerHTML(data);
+                
+                card.onclick = function() {
+                    if (this.classList.contains('flipped')) {
+                        openDetail(data);
+                    } else {
+                        this.classList.add('flipped');
+                        setTimeout(() => {
+                            openDetail(data);
+                        }, 600);
+                    }
+                };
+
+                wrapper.appendChild(card);
+                resultArea.appendChild(wrapper);
+            });
+        }
+
+        // 5. 详情页
+        function openDetail(data) {
+            detailImgEl.src = data.img; 
+            detailBtnEl.href = data.url;
+            detailModal.style.display = 'flex';
+        }
+
+        function closeDetail() {
+            detailModal.style.display = 'none';
+        }
+
+        // 6. 全量图鉴 & 分享功能
+        function openReport() {
+            reportModal.style.display = 'block';
+            reportGrid.innerHTML = '';
+            tarotData.forEach(data => {
+                const item = document.createElement('div');
+                item.className = 'report-item';
+                item.innerHTML = `
+                    <img src="${data.img}" class="report-img" onerror="this.parentElement.innerHTML='<div style=\\'color:#ff6b6b;font-size:10px;border:1px solid #333;padding:10px;\\'>缺失</div>'">
+                    <div class="report-title">${data.title}</div>
+                `;
+                reportGrid.appendChild(item);
+            });
+        }
+
+        function closeReport() {
+            reportModal.style.display = 'none';
+        }
+
+        // 打开分享弹窗
+        function openShare() {
+            sharePosterEl.src = sharePosterImg;
+            shareModal.style.display = 'flex';
+        }
+
+        function closeShare() {
+            shareModal.style.display = 'none';
+        }
+
+        // 复制链接
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                copyTip.style.opacity = '1';
+                setTimeout(() => { copyTip.style.opacity = '0'; }, 2000);
+            }).catch(err => {
+                alert('复制失败，请手动复制浏览器链接');
+            });
+        }
+
+        // 保存图片 (创建临时链接下载)
+        function saveImage() {
+            const link = document.createElement('a');
+            link.href = sharePosterImg;
+            link.download = '2026_Tarot_Report.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
