@@ -68,7 +68,7 @@
         }
 
 
-        /* --- 1. 首页 (Landing) --- */
+        /* --- 1. 首页 (Landing) 布局优化 --- */
         #landing-screen {
             height: 100vh;
             display: flex;
@@ -82,15 +82,21 @@
             padding: 20px;
         }
 
-        /* 核心视觉容器 */
+        /* 核心视觉容器：垂直排列 + 限制宽度 (修复电脑版气泡过远问题) */
         .visual-center {
             position: relative;
             display: flex;
-            flex-direction: column; /* 垂直排列 */
+            flex-direction: column; /* 垂直排列：Logo在上，光环在下 */
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
             width: 100%;
+            
+            /* ⚠️ 关键修改：限制最大宽度，让它在电脑上也保持像手机一样的紧凑布局 */
+            max-width: 320px; 
+            margin-left: auto;
+            margin-right: auto;
+            
             height: auto;
         }
 
@@ -111,7 +117,7 @@
             animation: logoBreath 4s ease-in-out infinite;
         }
 
-        /* SVG 背景层 */
+        /* SVG 背景层：相对定位 */
         .mystic-logo-container {
             position: relative;
             width: 120px;
@@ -126,7 +132,7 @@
             opacity: 0.7;
         }
 
-        /* 气泡 */
+        /* 气泡样式 */
         .bubble {
             position: absolute;
             background: rgba(157, 78, 221, 0.3);
@@ -142,8 +148,18 @@
             z-index: 6; 
         }
         
-        .bubble-left { left: 10%; top: 10%; animation-delay: 0s; }
-        .bubble-right { right: 10%; bottom: 10%; animation-delay: 2s; }
+        /* 气泡位置调整：紧贴 320px 的容器边缘 */
+        .bubble-left { 
+            left: -10px; /* 稍微向左探出一点点，更自然 */
+            top: 15%; 
+            animation-delay: 0s; 
+        }
+        
+        .bubble-right { 
+            right: -10px; /* 稍微向右探出一点点 */
+            bottom: 15%; 
+            animation-delay: 2s; 
+        }
 
         @keyframes floatBubble {
             0%, 100% { transform: translateY(0); }
@@ -476,10 +492,31 @@
         </div>
     </div>
 
+    <div id="share-modal">
+        <div class="share-content">
+            <div class="share-close" onclick="closeShare()">×</div>
+            <img id="share-poster-img" src="" class="share-poster">
+            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 8px; margin-bottom: 5px;">(点击图片可放大)</p>
+            
+            <div class="share-actions">
+                <button class="btn-share-action" onclick="copyLink()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5 7.5l4-4a5 5 0 0 0-7.5-7.5"/><path d="M14 11a5 5 0 0 0-7.5-7.5l-4 4a5 5 0 0 0 7.5 7.5"/></svg>
+                    复制链接
+                </button>
+                <button class="btn-share-action btn-primary" onclick="saveImage()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    保存海报
+                </button>
+            </div>
+            <p id="copy-tip" style="color:#4cd137; font-size:0.9rem; margin-top:10px; opacity:0; transition:opacity 0.3s; font-weight:bold;">✨ 链接已复制，快去分享吧！</p>
+        </div>
+    </div>
+
     <script>
         const cardBackImg = "images/card_back.jpg"; 
         const sharePosterImg = "images/share_poster.jpg";
 
+        // --- 核心配置：已更新跳转链接 ---
         const tarotData = [
             // 1. 贵金属天花板
             { id: 1, title: "贵金属天花板", img: "images/card_01.jpg", url: "https://flash.jin10.com/detail/20251229164727998800" },
@@ -516,6 +553,9 @@
         const detailModal = document.getElementById('detail-modal');
         const detailImgEl = document.getElementById('detail-img-el');
         const detailBtnEl = document.getElementById('detail-btn-el');
+        const shareModal = document.getElementById('share-modal');
+        const sharePosterEl = document.getElementById('share-poster-img');
+        const copyTip = document.getElementById('copy-tip');
 
         function getCardInnerHTML(data) {
             return `
@@ -683,6 +723,10 @@
             link.click();
             document.body.removeChild(link);
         }
+
+        // --- 核心修复：添加事件监听 ---
+        // 确保点击海报图片时，调用放大函数
+        sharePosterEl.addEventListener('click', viewFullPoster);
 
     </script>
 </body>
