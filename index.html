@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- 🌟 高亮版星空背景 (修改了透明度和大小) --- */
+        /* --- 🌟 高亮版星空背景 --- */
         .stars-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -44,7 +44,6 @@
         .stars-layer {
             position: absolute;
             top: -50%; left: -50%; width: 200%; height: 200%;
-            /* 增大星星尺寸(2px/3px) 提高透明度(0.8) */
             background-image: 
                 radial-gradient(2px 2px at 10% 10%, rgba(255,255,255,0.8) 50%, transparent),
                 radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.8) 50%, transparent),
@@ -53,7 +52,7 @@
                 radial-gradient(2px 2px at 80% 50%, rgba(255,215,0, 0.8) 50%, transparent);
             background-size: 400px 400px; 
             animation: moveStars 100s linear infinite; 
-            opacity: 0.8; /* 整体更亮 */
+            opacity: 0.8;
         }
 
         .stars-layer.layer-2 {
@@ -191,6 +190,8 @@
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+
+        /* --- 2. 抽牌/洗牌容器 (Deck) --- */
         #deck-container {
             display: none;
             position: fixed;
@@ -201,6 +202,7 @@
             pointer-events: none;
         }
 
+        /* 卡片通用样式 */
         .card {
             width: var(--card-width-desktop);
             height: calc(var(--card-width-desktop) * var(--card-ratio));
@@ -234,6 +236,7 @@
         .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .card-back img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* --- 3. 结果页 (Result) --- */
         #result-screen {
             display: none;
             width: 100%;
@@ -274,6 +277,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
+        /* --- 4. 详情弹窗 (修改部分: 缩小尺寸) --- */
         #detail-modal {
             display: none;
             position: fixed;
@@ -289,17 +293,24 @@
         }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        .detail-content { position: relative; max-width: 500px; width: 100%; text-align: center; }
+        .detail-content {
+            position: relative;
+            max-width: 420px; /* 改小了：原500px -> 420px */
+            width: 90%;       /* 改小了：原100% -> 90% */
+            text-align: center;
+        }
         .detail-img { width: 100%; border-radius: 12px; box-shadow: 0 0 30px rgba(157, 78, 221, 0.4); border: 2px solid #333; }
         .detail-close { position: absolute; top: -50px; right: 0; color: #fff; font-size: 2rem; cursor: pointer; background: rgba(255,255,255,0.1); width: 40px; height: 40px; line-height: 36px; text-align: center; border-radius: 50%; transition: 0.3s; }
         .detail-close:hover { background: rgba(255,255,255,0.2); }
         .btn-detail-link { display: inline-block; margin-top: 25px; padding: 12px 45px; background: var(--accent-purple); color: #fff; text-decoration: none; border-radius: 30px; font-weight: bold; box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4); transition: 0.3s; letter-spacing: 1px; }
         .btn-detail-link:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(157, 78, 221, 0.7); background: #b06ce0; }
 
+        /* --- 底部按钮区 --- */
         .action-bar { display: flex; gap: 20px; margin-top: auto; padding-bottom: 20px; }
         .btn-outline { padding: 12px 35px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #ddd; border-radius: 30px; cursor: pointer; font-family: 'Noto Sans SC', sans-serif; transition: 0.3s; backdrop-filter: blur(5px); }
         .btn-outline:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
 
+        /* --- 5. 全量图鉴 --- */
         #report-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.98); z-index: 150; overflow-y: auto; padding: 20px; box-sizing: border-box; }
         .report-header { max-width: 600px; margin: 10px auto; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
         .report-title-main { font-family:'Noto Serif SC'; font-size: 1.2rem; color:#fff; margin: 0; }
@@ -313,6 +324,7 @@
         .close-btn-inline { font-size: 1.8rem; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: 0.3s; }
         .close-btn-inline:hover { color: #fff; }
 
+        /* --- 6. 分享弹窗 --- */
         #share-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 300; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.3s; padding: 20px; box-sizing: border-box; }
         @keyframes fadeIn { from {opacity:0} to {opacity:1} }
         .share-content { position: relative; max-width: 400px; width: 100%; text-align: center; }
