@@ -277,7 +277,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* --- 4. 详情弹窗 --- */
+        /* --- 4. 详情弹窗 (已缩小) --- */
         #detail-modal {
             display: none;
             position: fixed;
@@ -340,7 +340,7 @@
             cursor: zoom-in; /* 提示可点击 */
         }
 
-        .share-actions { display: flex; gap: 15px; justify-content: center; margin-top: 15px; } /* 缩小间距 */
+        .share-actions { display: flex; gap: 15px; justify-content: center; margin-top: 15px; } 
         .btn-share-action { flex: 1; padding: 14px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 10px; cursor: pointer; font-size: 0.95rem; transition: 0.3s; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-share-action:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-2px); }
         .btn-primary { background: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3); }
@@ -440,7 +440,7 @@
     <div id="share-modal">
         <div class="share-content">
             <div class="share-close" onclick="closeShare()">×</div>
-            <img id="share-poster-img" src="" class="share-poster" onclick="viewFullPoster()">
+            <img id="share-poster-img" src="" class="share-poster">
             <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 8px; margin-bottom: 5px;">(点击图片可放大)</p>
             
             <div class="share-actions">
@@ -665,6 +665,11 @@
             link.click();
             document.body.removeChild(link);
         }
+
+        // --- 核心修复：添加事件监听 ---
+        // 确保点击海报图片时，调用放大函数
+        sharePosterEl.addEventListener('click', viewFullPoster);
+
     </script>
 </body>
 </html>
