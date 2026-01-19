@@ -492,26 +492,6 @@
         </div>
     </div>
 
-    <div id="share-modal">
-        <div class="share-content">
-            <div class="share-close" onclick="closeShare()">×</div>
-            <img id="share-poster-img" src="" class="share-poster">
-            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 8px; margin-bottom: 5px;">(点击图片可放大)</p>
-            
-            <div class="share-actions">
-                <button class="btn-share-action" onclick="copyLink()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5 7.5l4-4a5 5 0 0 0-7.5-7.5"/><path d="M14 11a5 5 0 0 0-7.5-7.5l-4 4a5 5 0 0 0 7.5 7.5"/></svg>
-                    复制链接
-                </button>
-                <button class="btn-share-action btn-primary" onclick="saveImage()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    保存海报
-                </button>
-            </div>
-            <p id="copy-tip" style="color:#4cd137; font-size:0.9rem; margin-top:10px; opacity:0; transition:opacity 0.3s; font-weight:bold;">✨ 链接已复制，快去分享吧！</p>
-        </div>
-    </div>
-
     <script>
         const cardBackImg = "images/card_back.jpg"; 
         const sharePosterImg = "images/share_poster.jpg";
@@ -553,9 +533,6 @@
         const detailModal = document.getElementById('detail-modal');
         const detailImgEl = document.getElementById('detail-img-el');
         const detailBtnEl = document.getElementById('detail-btn-el');
-        const shareModal = document.getElementById('share-modal');
-        const sharePosterEl = document.getElementById('share-poster-img');
-        const copyTip = document.getElementById('copy-tip');
 
         function getCardInnerHTML(data) {
             return `
@@ -665,14 +642,6 @@
             detailModal.style.display = 'flex';
         }
 
-        // 新增：专门查看海报大图的函数
-        function viewFullPoster() {
-            detailImgEl.src = sharePosterImg;
-            // 海报不需要显示“查看详解”按钮
-            detailBtnEl.style.display = 'none'; 
-            detailModal.style.display = 'flex';
-        }
-
         function closeDetail() {
             detailModal.style.display = 'none';
             const cards = document.querySelectorAll('.result-card-wrapper .card');
@@ -723,10 +692,6 @@
             link.click();
             document.body.removeChild(link);
         }
-
-        // --- 核心修复：添加事件监听 ---
-        // 确保点击海报图片时，调用放大函数
-        sharePosterEl.addEventListener('click', viewFullPoster);
 
     </script>
 </body>
