@@ -277,7 +277,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* --- 4. 详情弹窗 (修改部分: 缩小尺寸) --- */
+        /* --- 4. 详情弹窗 --- */
         #detail-modal {
             display: none;
             position: fixed;
@@ -295,8 +295,8 @@
 
         .detail-content {
             position: relative;
-            max-width: 420px; /* 改小了：原500px -> 420px */
-            width: 90%;       /* 改小了：原100% -> 90% */
+            max-width: 420px; 
+            width: 90%;       
             text-align: center;
         }
         .detail-img { width: 100%; border-radius: 12px; box-shadow: 0 0 30px rgba(157, 78, 221, 0.4); border: 2px solid #333; }
@@ -324,12 +324,23 @@
         .close-btn-inline { font-size: 1.8rem; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: 0.3s; }
         .close-btn-inline:hover { color: #fff; }
 
-        /* --- 6. 分享弹窗 --- */
+        /* --- 6. 分享弹窗 (优化: 限制高度 & 支持放大) --- */
         #share-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 300; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.3s; padding: 20px; box-sizing: border-box; }
         @keyframes fadeIn { from {opacity:0} to {opacity:1} }
         .share-content { position: relative; max-width: 400px; width: 100%; text-align: center; }
-        .share-poster { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #333; }
-        .share-actions { display: flex; gap: 15px; justify-content: center; margin-top: 25px; }
+        
+        .share-poster { 
+            width: 100%; 
+            height: auto;
+            max-height: 55vh; /* ⚠️ 限制最大高度为屏幕的55%，给按钮留空 */
+            object-fit: contain; /* 保证图片完整显示不拉伸 */
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            border: 2px solid #333; 
+            cursor: zoom-in; /* 提示可点击 */
+        }
+
+        .share-actions { display: flex; gap: 15px; justify-content: center; margin-top: 15px; } /* 缩小间距 */
         .btn-share-action { flex: 1; padding: 14px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 10px; cursor: pointer; font-size: 0.95rem; transition: 0.3s; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-share-action:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-2px); }
         .btn-primary { background: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3); }
@@ -429,7 +440,9 @@
     <div id="share-modal">
         <div class="share-content">
             <div class="share-close" onclick="closeShare()">×</div>
-            <img id="share-poster-img" src="" class="share-poster">
+            <img id="share-poster-img" src="" class="share-poster" onclick="viewFullPoster()">
+            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 8px; margin-bottom: 5px;">(点击图片可放大)</p>
+            
             <div class="share-actions">
                 <button class="btn-share-action" onclick="copyLink()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5 7.5l4-4a5 5 0 0 0-7.5-7.5"/><path d="M14 11a5 5 0 0 0-7.5-7.5l-4 4a5 5 0 0 0 7.5 7.5"/></svg>
@@ -440,7 +453,7 @@
                     保存海报
                 </button>
             </div>
-            <p id="copy-tip" style="color:#4cd137; font-size:0.9rem; margin-top:15px; opacity:0; transition:opacity 0.3s; font-weight:bold;">✨ 链接已复制，快去分享吧！</p>
+            <p id="copy-tip" style="color:#4cd137; font-size:0.9rem; margin-top:10px; opacity:0; transition:opacity 0.3s; font-weight:bold;">✨ 链接已复制，快去分享吧！</p>
         </div>
     </div>
 
@@ -580,6 +593,16 @@
         function openDetail(data) {
             detailImgEl.src = data.img; 
             detailBtnEl.href = data.url;
+            // 普通卡片显示“查看深度解读”按钮
+            detailBtnEl.style.display = 'inline-block'; 
+            detailModal.style.display = 'flex';
+        }
+
+        // 新增：专门查看海报大图的函数
+        function viewFullPoster() {
+            detailImgEl.src = sharePosterImg;
+            // 海报不需要显示“查看深度解读”按钮
+            detailBtnEl.style.display = 'none'; 
             detailModal.style.display = 'flex';
         }
 
