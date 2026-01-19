@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 全球展望</title>
+    <title>2026 大猜想</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,22 +82,60 @@
             padding: 20px;
         }
 
+        /* 视觉中心容器：包含Logo、SVG和气泡 */
+        .visual-center {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* 气泡样式 */
+        .bubble {
+            position: absolute;
+            background: rgba(157, 78, 221, 0.2);
+            border: 1px solid rgba(157, 78, 221, 0.5);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+            animation: floatBubble 3s ease-in-out infinite;
+        }
+        .bubble-left {
+            left: -50px;
+            top: 30%;
+            animation-delay: 0s;
+        }
+        .bubble-right {
+            right: -50px;
+            top: 20%;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
         .logo-container {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             animation: popIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
             position: relative;
         }
         .app-logo {
-            width: 110px;
+            width: 100px;
             height: auto;
             filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
             animation: logoBreath 4s ease-in-out infinite;
         }
 
         .mystic-logo-container {
-            width: 130px;
-            height: 130px;
-            margin-bottom: 25px;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 10px;
             position: relative;
             animation: popInRotate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
         }
@@ -117,7 +155,7 @@
             font-family: 'Noto Serif SC', serif;
             font-size: 3rem;
             margin: 10px 0;
-            letter-spacing: 4px;
+            letter-spacing: 2px;
             background: linear-gradient(to bottom, #ffffff 10%, #e2c474 60%, #cba33e 100%);
             -webkit-background-clip: text;
             color: transparent;
@@ -126,47 +164,38 @@
             animation: fadeInUp 1s ease-out 0.4s both;
         }
 
-        .credit-text {
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
-            letter-spacing: 2px;
-            margin-bottom: 35px;
-            background: rgba(255,255,255,0.03);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
         .main-subtitle {
             font-family: 'Noto Serif SC', serif;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #e0e0e0;
-            letter-spacing: 2px;
-            margin: 0;
+            letter-spacing: 1px;
+            margin: 10px 0 0 0;
             font-weight: 300;
-            animation: breathing 4s ease-in-out infinite, fadeInUp 1s ease-out 0.8s both;
+            animation: breathing 4s ease-in-out infinite, fadeInUp 1s ease-out 0.6s both;
         }
         @keyframes breathing { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.3); } }
 
         .btn-start {
             margin-top: 50px;
-            padding: 16px 60px;
+            padding: 15px 50px;
             background: rgba(157, 78, 221, 0.15);
             border: 1px solid rgba(157, 78, 221, 0.4);
             color: #fff;
             font-size: 1.15rem;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             cursor: pointer;
             border-radius: 50px;
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             font-family: 'Noto Sans SC', sans-serif;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2), inset 0 0 10px rgba(157, 78, 221, 0.2);
             backdrop-filter: blur(5px);
-            animation: fadeInUp 1s ease-out 1.0s both;
+            animation: fadeInUp 1s ease-out 0.8s both;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         
         .btn-start::after {
@@ -186,6 +215,17 @@
         }
         .btn-start:hover::after {
             transform: rotate(45deg) translate(100%, 100%);
+        }
+
+        /* 按钮上的指引箭头动效 */
+        .arrow-guide {
+            display: inline-block;
+            font-size: 1.2rem;
+            animation: pointMove 1.5s infinite;
+        }
+        @keyframes pointMove {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
         }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -241,7 +281,7 @@
             display: none;
             width: 100%;
             min-height: 100vh;
-            padding: 80px 20px 40px 20px;
+            padding: 60px 20px 40px 20px;
             box-sizing: border-box;
             flex-direction: column;
             align-items: center;
@@ -277,7 +317,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* --- 4. 详情弹窗 (已缩小) --- */
+        /* --- 4. 详情弹窗 --- */
         #detail-modal {
             display: none;
             position: fixed;
@@ -310,52 +350,65 @@
         .btn-outline { padding: 12px 35px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #ddd; border-radius: 30px; cursor: pointer; font-family: 'Noto Sans SC', sans-serif; transition: 0.3s; backdrop-filter: blur(5px); }
         .btn-outline:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
 
-        /* --- 5. 全量图鉴 --- */
-        #report-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.98); z-index: 150; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-        .report-header { max-width: 600px; margin: 10px auto; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-        .report-title-main { font-family:'Noto Serif SC'; font-size: 1.2rem; color:#fff; margin: 0; }
-        .btn-share-icon { background: var(--accent-purple); color: #fff; border: none; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.3s; box-shadow: 0 4px 10px rgba(157, 78, 221, 0.3); }
-        .btn-share-icon:hover { background: #b06ce0; transform: translateY(-1px); }
-        .report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 600px; margin: 30px auto; }
+        /* --- 5. 全量图鉴 (Report Modal) - 布局更新 --- */
+        #report-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.98); z-index: 150; overflow-y: auto; padding: 0 0 80px 0; box-sizing: border-box; }
+        
+        .report-header-area {
+            text-align: center;
+            padding: 30px 20px 10px 20px;
+            background: linear-gradient(to bottom, rgba(14,14,18,0.9), transparent);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .report-title-main { font-family:'Noto Serif SC'; font-size: 1.8rem; color:#fff; margin: 0; letter-spacing: 2px; }
+        .report-subtitle { font-size: 0.9rem; color: #aaa; margin-top: 5px; font-weight: 300; }
+
+        .report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 600px; margin: 10px auto; padding: 0 20px; }
         .report-item { text-align: center; transition: 0.3s; }
         .report-item:hover { transform: translateY(-3px); }
         .report-img { width: 100%; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); aspect-ratio: 1 / 1.618; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
         .report-title { font-size: 0.75rem; color: #aaa; margin-top: 5px; letter-spacing: 1px; }
-        .close-btn-inline { font-size: 1.8rem; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: 0.3s; }
-        .close-btn-inline:hover { color: #fff; }
-
-        /* --- 6. 分享弹窗 (优化: 限制高度 & 支持放大) --- */
-        #share-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 300; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.3s; padding: 20px; box-sizing: border-box; }
-        @keyframes fadeIn { from {opacity:0} to {opacity:1} }
-        .share-content { position: relative; max-width: 400px; width: 100%; text-align: center; }
         
-        .share-poster { 
-            width: 100%; 
-            height: auto;
-            max-height: 55vh; /* ⚠️ 限制最大高度为屏幕的55%，给按钮留空 */
-            object-fit: contain; /* 保证图片完整显示不拉伸 */
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            border: 2px solid #333; 
-            cursor: zoom-in; /* 提示可点击 */
-        }
+        .close-btn-fixed { position: absolute; top: 20px; right: 20px; font-size: 2rem; color: #aaa; cursor: pointer; line-height: 1; z-index: 20; }
+        .close-btn-fixed:hover { color: #fff; }
 
-        .share-actions { display: flex; gap: 15px; justify-content: center; margin-top: 15px; } 
-        .btn-share-action { flex: 1; padding: 14px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 10px; cursor: pointer; font-size: 0.95rem; transition: 0.3s; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-share-action:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-2px); }
-        .btn-primary { background: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3); }
-        .btn-primary:hover { background: #b06ce0; border-color: #b06ce0; box-shadow: 0 8px 20px rgba(157, 78, 221, 0.5); }
-        .share-close { position: absolute; top: -50px; right: 0; font-size: 2rem; color: #fff; cursor: pointer; background: rgba(255,255,255,0.1); width: 40px; height: 40px; line-height: 36px; text-align: center; border-radius: 50%; transition: 0.3s; }
-        .share-close:hover { background: rgba(255,255,255,0.2); }
+        /* 底部固定操作栏 */
+        .report-footer {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            box-sizing: border-box;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            z-index: 20;
+        }
+        .btn-footer {
+            flex: 1;
+            max-width: 200px;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+        }
+        .btn-footer.save { background: #333; color: #fff; border: 1px solid #555; }
+        .btn-footer.full { background: var(--accent-purple); color: #fff; }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.4rem; }
-            .main-subtitle { font-size: 1.05rem; padding: 0 10px; line-height: 1.5; }
+            h1 { font-size: 2.2rem; }
+            .main-subtitle { font-size: 1rem; padding: 0 10px; line-height: 1.5; }
             :root { --card-width-desktop: var(--card-width-mobile); }
             .result-cards-container { gap: 10px; }
-            .btn-outline { padding: 10px 25px; font-size: 0.9rem; }
-            .mystic-logo-container { width: 120px; height: 120px; }
-            .app-logo { width: 100px; }
+            .btn-outline { padding: 10px 20px; font-size: 0.9rem; }
+            .mystic-logo-container { width: 100px; height: 100px; }
+            .app-logo { width: 90px; }
         }
     </style>
 </head>
@@ -367,51 +420,59 @@
     </div>
 
     <div id="landing-screen">
-        <div class="logo-container">
-            <img src="images/logo.png" class="app-logo" onerror="this.style.display='none';">
+        <div class="visual-center">
+            <div class="bubble bubble-left">预测</div>
+            <div class="bubble bubble-right">展望</div>
+            
+            <div class="logo-container">
+                <img src="images/logo.png" class="app-logo" onerror="this.style.display='none';">
+            </div>
+
+            <div class="mystic-logo-container">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#cba33e;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="grad-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#9d4edd;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3c096c;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <g class="svg-rays" stroke="url(#grad-purple)" stroke-width="2" opacity="0.5">
+                        <line x1="100" y1="10" x2="100" y2="30" /><line x1="100" y1="190" x2="100" y2="170" /><line x1="10" y1="100" x2="30" y2="100" /><line x1="190" y1="100" x2="170" y2="100" /><line x1="36.4" y1="36.4" x2="50.5" y2="50.5" /><line x1="163.6" y1="163.6" x2="149.5" y2="149.5" /><line x1="36.4" y1="163.6" x2="50.5" y2="149.5" /><line x1="163.6" y1="36.4" x2="149.5" y2="50.5" />
+                    </g>
+                    <circle class="svg-ring-outer" cx="100" cy="100" r="70" fill="none" stroke="url(#grad-purple)" stroke-width="1.5" stroke-dasharray="10, 20, 40, 30" opacity="0.6" />
+                    <circle class="svg-ring-inner" cx="100" cy="100" r="55" fill="none" stroke="url(#grad-gold)" stroke-width="1" stroke-dasharray="50, 50" opacity="0.4" />
+                    <g class="svg-core-pulse" transform-origin="center">
+                        <path d="M100 40 L115 85 L160 100 L115 115 L100 160 L85 115 L40 100 L85 85 Z" fill="url(#grad-gold)" opacity="0.3" />
+                        <path d="M100 75 C120 75, 140 85, 140 100 C140 115, 120 125, 100 125 C80 125, 60 115, 60 100 C60 85, 80 75, 100 75 Z" fill="none" stroke="url(#grad-gold)" stroke-width="2" />
+                        <circle cx="100" cy="100" r="12" fill="url(#grad-purple)" />
+                        <circle cx="100" cy="100" r="6" fill="#fff" filter="blur(1px)" />
+                    </g>
+                </svg>
+            </div>
         </div>
 
-        <div class="mystic-logo-container">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#cba33e;stop-opacity:1" />
-                    </linearGradient>
-                    <linearGradient id="grad-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#9d4edd;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#3c096c;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-                <g class="svg-rays" stroke="url(#grad-purple)" stroke-width="2" opacity="0.5">
-                    <line x1="100" y1="10" x2="100" y2="30" /><line x1="100" y1="190" x2="100" y2="170" /><line x1="10" y1="100" x2="30" y2="100" /><line x1="190" y1="100" x2="170" y2="100" /><line x1="36.4" y1="36.4" x2="50.5" y2="50.5" /><line x1="163.6" y1="163.6" x2="149.5" y2="149.5" /><line x1="36.4" y1="163.6" x2="50.5" y2="149.5" /><line x1="163.6" y1="36.4" x2="149.5" y2="50.5" />
-                </g>
-                <circle class="svg-ring-outer" cx="100" cy="100" r="70" fill="none" stroke="url(#grad-purple)" stroke-width="1.5" stroke-dasharray="10, 20, 40, 30" opacity="0.6" />
-                <circle class="svg-ring-inner" cx="100" cy="100" r="55" fill="none" stroke="url(#grad-gold)" stroke-width="1" stroke-dasharray="50, 50" opacity="0.4" />
-                <g class="svg-core-pulse" transform-origin="center">
-                    <path d="M100 40 L115 85 L160 100 L115 115 L100 160 L85 115 L40 100 L85 85 Z" fill="url(#grad-gold)" opacity="0.3" />
-                    <path d="M100 75 C120 75, 140 85, 140 100 C140 115, 120 125, 100 125 C80 125, 60 115, 60 100 C60 85, 80 75, 100 75 Z" fill="none" stroke="url(#grad-gold)" stroke-width="2" />
-                    <circle cx="100" cy="100" r="12" fill="url(#grad-purple)" />
-                    <circle cx="100" cy="100" r="6" fill="#fff" filter="blur(1px)" />
-                </g>
-            </svg>
-        </div>
-
-        <h1>2026 全球展望</h1>
-        <div class="credit-text">金十数据APP独家制作</div>
-        <p class="main-subtitle">新的一年，你有哪些期待和疑问？</p>
-        <button class="btn-start" onclick="startSequence()">开启抽牌</button>
+        <h1>2026 大猜想</h1>
+        <p class="main-subtitle">对新的一年有哪些疑问与期待？</p>
+        <button class="btn-start" onclick="startSequence()">
+            抽取卡牌 <span class="arrow-guide">➔</span>
+        </button>
     </div>
 
     <div id="deck-container"></div>
 
     <div id="result-screen">
-        <h2 style="font-family: 'Noto Serif SC'; font-weight: normal; margin-bottom: 30px; color: #ccc; letter-spacing: 3px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">2026 预言牌阵</h2>
-        <p style="color: rgba(255,255,255,0.5); font-size:0.85rem; margin-bottom:30px; letter-spacing: 1px;">点击卡牌翻阅你的未来启示</p>
+        <h2 style="font-family: 'Noto Serif SC'; font-weight: normal; margin-bottom: 10px; color: #fff; letter-spacing: 2px;">2026 大猜想</h2>
+        <p style="color: rgba(255,255,255,0.6); font-size:0.85rem; margin-bottom:30px; letter-spacing: 1px;">- 点击翻牌 -</p>
+        
         <div class="result-cards-container" id="result-cards-area"></div>
+        
         <div class="action-bar">
-            <button class="btn-outline" onclick="resetDraw()">↺ 重新抽牌</button>
-            <button class="btn-outline" style="border-color: var(--accent-purple); color: var(--accent-purple); background: rgba(157, 78, 221, 0.1);" onclick="openReport()">⊞ 全量图鉴</button>
+            <button class="btn-outline" onclick="resetDraw()">重新抽取</button>
+            <button class="btn-outline" style="border-color: var(--accent-purple); color: var(--accent-purple); background: rgba(157, 78, 221, 0.1);" onclick="openReport()">查看全部</button>
         </div>
     </div>
 
@@ -424,48 +485,32 @@
     </div>
 
     <div id="report-modal">
-        <div class="report-header">
-            <h3 class="report-title-main">2026 猜想全图鉴</h3>
-            <div style="display:flex; align-items:center; gap:15px;">
-                <button class="btn-share-icon" onclick="openShare()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-                    分享
-                </button>
-                <div class="close-btn-inline" onclick="closeReport()">×</div>
-            </div>
+        <div class="close-btn-fixed" onclick="closeReport()">×</div>
+        
+        <div class="report-header-area">
+            <h3 class="report-title-main">2026 大猜想</h3>
+            <p class="report-subtitle">对新的一年有哪些疑问与期待？</p>
         </div>
-        <div class="report-grid" id="report-grid-area"></div>
-    </div>
 
-    <div id="share-modal">
-        <div class="share-content">
-            <div class="share-close" onclick="closeShare()">×</div>
-            <img id="share-poster-img" src="" class="share-poster">
-            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 8px; margin-bottom: 5px;">(点击图片可放大)</p>
-            
-            <div class="share-actions">
-                <button class="btn-share-action" onclick="copyLink()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5 7.5l4-4a5 5 0 0 0-7.5-7.5"/><path d="M14 11a5 5 0 0 0-7.5-7.5l-4 4a5 5 0 0 0 7.5 7.5"/></svg>
-                    复制链接
-                </button>
-                <button class="btn-share-action btn-primary" onclick="saveImage()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    保存海报
-                </button>
-            </div>
-            <p id="copy-tip" style="color:#4cd137; font-size:0.9rem; margin-top:10px; opacity:0; transition:opacity 0.3s; font-weight:bold;">✨ 链接已复制，快去分享吧！</p>
+        <div class="report-grid" id="report-grid-area"></div>
+
+        <div class="report-footer">
+            <button class="btn-footer save" onclick="saveImage()">保存图片</button>
+            <button class="btn-footer full" onclick="openFullArticle()">完整解读</button>
         </div>
     </div>
 
     <script>
         const cardBackImg = "images/card_back.jpg"; 
+        // 这个变量现在用于“保存图片”功能下载长图，请确保你已经生成了长图并替换了该文件
         const sharePosterImg = "images/share_poster.jpg";
 
         const tarotData = [
             { id: 1, title: "黄金天花板", img: "images/card_01.jpg", url: "https://www.jin10.com/topic/gold" },
             { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://www.jin10.com" },
             { id: 3, title: "AI泡沫", img: "images/card_03.jpg", url: "https://www.jin10.com" },
-            { id: 4, title: "全球变暖", img: "images/card_04.jpg", url: "https://www.jin10.com" },
+            /* 已修改卡片文案 */
+            { id: 4, title: "市场趋势", img: "images/card_04.jpg", url: "https://www.jin10.com" },
             { id: 5, title: "贸易壁垒", img: "images/card_05.jpg", url: "https://www.jin10.com" },
             { id: 6, title: "美联储降息", img: "images/card_06.jpg", url: "https://www.jin10.com" },
             { id: 7, title: "无人驾驶", img: "images/card_07.jpg", url: "https://www.jin10.com" },
@@ -485,9 +530,6 @@
         const detailModal = document.getElementById('detail-modal');
         const detailImgEl = document.getElementById('detail-img-el');
         const detailBtnEl = document.getElementById('detail-btn-el');
-        const shareModal = document.getElementById('share-modal');
-        const sharePosterEl = document.getElementById('share-poster-img');
-        const copyTip = document.getElementById('copy-tip');
 
         function getCardInnerHTML(data) {
             return `
@@ -593,16 +635,7 @@
         function openDetail(data) {
             detailImgEl.src = data.img; 
             detailBtnEl.href = data.url;
-            // 普通卡片显示“查看深度解读”按钮
             detailBtnEl.style.display = 'inline-block'; 
-            detailModal.style.display = 'flex';
-        }
-
-        // 新增：专门查看海报大图的函数
-        function viewFullPoster() {
-            detailImgEl.src = sharePosterImg;
-            // 海报不需要显示“查看深度解读”按钮
-            detailBtnEl.style.display = 'none'; 
             detailModal.style.display = 'flex';
         }
 
@@ -633,42 +666,29 @@
             reportModal.style.display = 'none';
         }
 
-        function openShare() {
-            sharePosterEl.src = sharePosterImg;
-            shareModal.style.display = 'flex';
+        // 跳转完整解读
+        function openFullArticle() {
+            window.location.href = "https://xnews.jin10.com/details/204685?id=204685";
         }
 
-        function closeShare() {
-            shareModal.style.display = 'none';
-        }
-
-        function copyLink() {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                copyTip.style.opacity = '1';
-                setTimeout(() => { copyTip.style.opacity = '0'; }, 2500);
-            }).catch(err => {
-                alert('复制失败，请手动复制浏览器链接');
-            });
-        }
-
+        // 保存长图 (下载 images/share_poster.jpg)
         function saveImage() {
             const isWechat = /MicroMessenger/i.test(navigator.userAgent);
             if (isWechat) {
-                alert('请长按海报图片进行保存');
+                // 微信环境直接打开大图让用户长按
+                detailImgEl.src = sharePosterImg;
+                detailBtnEl.style.display = 'none'; 
+                detailModal.style.display = 'flex';
+                alert('请长按图片保存');
                 return;
             }
             const link = document.createElement('a');
             link.href = sharePosterImg;
-            link.download = '2026_Tarot_Forecast_Poster.jpg';
+            link.download = '2026_Forecast_Full.jpg';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
-
-        // --- 核心修复：添加事件监听 ---
-        // 确保点击海报图片时，调用放大函数
-        sharePosterEl.addEventListener('click', viewFullPoster);
 
     </script>
 </body>
