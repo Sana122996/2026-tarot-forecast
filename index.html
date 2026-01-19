@@ -82,39 +82,23 @@
             padding: 20px;
         }
 
-        /* 核心视觉容器：垂直排列 (Column) */
+        /* 核心视觉容器：固定大小，确保内部元素绝对对齐 */
         .visual-center {
             position: relative;
+            width: 220px;
+            height: 220px;
             display: flex;
-            flex-direction: column; /* 关键：垂直排列 */
-            align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            width: auto;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        /* Logo 容器 */
-        .logo-container {
-            position: relative;
-            width: 100px; /* Logo 大小 */
-            height: auto;
-            margin-bottom: 10px; /* Logo和下面图案的间距 */
-            z-index: 5;
-            animation: popIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-        }
-        
-        .app-logo {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
-            animation: logoBreath 4s ease-in-out infinite;
-        }
-
-        /* SVG 背景层：不再绝对定位，而是流式布局在Logo下方 */
+        /* 背景SVG光环：绝对定位撑满容器 */
         .mystic-logo-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0; left: 0;
             z-index: 1;
             /* 延迟入场 */
             animation: popInRotate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
@@ -124,6 +108,25 @@
             width: 100%;
             height: 100%;
             opacity: 0.7;
+        }
+
+        /* 前景Logo：相对定位，居中 */
+        .logo-container {
+            position: relative;
+            z-index: 5;
+            width: 100px; /* 控制Logo大小 */
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: popIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        
+        .app-logo {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+            animation: logoBreath 4s ease-in-out infinite;
         }
 
         /* 气泡：绝对定位相对于 visual-center */
@@ -139,18 +142,18 @@
             white-space: nowrap;
             animation: floatBubble 4s ease-in-out infinite;
             box-shadow: 0 4px 15px rgba(157, 78, 221, 0.2);
-            z-index: 6; 
+            z-index: 6; /* 气泡在Logo之上 */
         }
         
         .bubble-left {
-            left: -60px; /* 向左偏移 */
-            top: 20%; 
+            left: 0;
+            top: 15%; 
             animation-delay: 0s;
         }
         
         .bubble-right {
-            right: -60px; /* 向右偏移 */
-            bottom: 20%;
+            right: 0;
+            bottom: 15%;
             animation-delay: 2s; 
         }
 
@@ -447,10 +450,6 @@
     <div id="landing-screen">
         <div class="visual-center">
             
-            <div class="logo-container">
-                <img src="images/logo.png" class="app-logo" onerror="this.style.display='none';">
-            </div>
-
             <div class="mystic-logo-container">
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -475,6 +474,10 @@
                         <circle cx="100" cy="100" r="6" fill="#fff" filter="blur(1px)" />
                     </g>
                 </svg>
+            </div>
+
+            <div class="logo-container">
+                <img src="images/logo.png" class="app-logo" onerror="this.style.display='none';">
             </div>
 
             <div class="bubble bubble-left">预测</div>
@@ -552,8 +555,8 @@
 
         // --- 核心配置：已更新跳转链接 ---
         const tarotData = [
-            // 1. 黄金
-            { id: 1, title: "黄金天花板", img: "images/card_01.jpg", url: "https://flash.jin10.com/detail/20251229164727998800" },
+            // 1. 黄金 -> 贵金属天花板
+            { id: 1, title: "贵金属天花板", img: "images/card_01.jpg", url: "https://flash.jin10.com/detail/20251229164727998800" },
             // 2. 和平奖
             { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://xnews.jin10.com/details/207220?id=207220" },
             // 3. AI泡沫
