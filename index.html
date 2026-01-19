@@ -68,7 +68,7 @@
         }
 
 
-        /* --- 1. 首页 (Landing) --- */
+        /* --- 1. 首页 (Landing) 布局优化 --- */
         #landing-screen {
             height: 100vh;
             display: flex;
@@ -82,21 +82,57 @@
             padding: 20px;
         }
 
+        /* 核心视觉容器：固定大小，确保内部元素绝对对齐 */
         .visual-center {
             position: relative;
+            width: 220px;
+            height: 220px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-            width: 200px; 
-            height: 200px;
             justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        /* 气泡样式优化：错落有致 */
+        /* 背景SVG光环：绝对定位撑满容器 */
+        .mystic-logo-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0; left: 0;
+            z-index: 1;
+            /* 延迟入场 */
+            animation: popInRotate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+        
+        .mystic-logo-container svg {
+            width: 100%;
+            height: 100%;
+            opacity: 0.7;
+        }
+
+        /* 前景Logo：相对定位，居中 */
+        .logo-container {
+            position: relative;
+            z-index: 5;
+            width: 100px; /* 控制Logo大小 */
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: popIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        
+        .app-logo {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+            animation: logoBreath 4s ease-in-out infinite;
+        }
+
+        /* 气泡：绝对定位相对于 visual-center */
         .bubble {
             position: absolute;
-            background: rgba(157, 78, 221, 0.25);
+            background: rgba(157, 78, 221, 0.3);
             border: 1px solid rgba(157, 78, 221, 0.6);
             color: #fff;
             padding: 6px 14px;
@@ -106,55 +142,27 @@
             white-space: nowrap;
             animation: floatBubble 4s ease-in-out infinite;
             box-shadow: 0 4px 15px rgba(157, 78, 221, 0.2);
+            z-index: 6; /* 气泡在Logo之上 */
         }
         
         .bubble-left {
-            left: -10px;
-            top: 10%;
+            left: 0;
+            top: 15%; 
             animation-delay: 0s;
         }
         
         .bubble-right {
-            right: -10px;
-            top: 75%;
-            animation-delay: 2s;
+            right: 0;
+            bottom: 15%;
+            animation-delay: 2s; 
         }
 
         @keyframes floatBubble {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
-        .logo-container {
-            margin-bottom: 5px;
-            animation: popIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-            position: relative;
-            z-index: 2;
-        }
-        .app-logo {
-            width: 100px;
-            height: auto;
-            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
-            animation: logoBreath 4s ease-in-out infinite;
-        }
-
-        .mystic-logo-container {
-            width: 120px;
-            height: 120px;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            animation: popInRotate 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
-        }
-        
-        .mystic-logo-container svg {
-            width: 160%;
-            height: 160%;
-            transform: translate(-18%, -18%);
-            opacity: 0.6;
-        }
-
+        /* SVG 内部动画 */
         .svg-ring-outer { animation: spinSlow 30s linear infinite; transform-origin: center; }
         .svg-ring-inner { animation: spinSlow 20s linear infinite reverse; transform-origin: center; }
         .svg-core-pulse { animation: corePulse 3s ease-in-out infinite; transform-origin: center; }
@@ -441,13 +449,7 @@
 
     <div id="landing-screen">
         <div class="visual-center">
-            <div class="bubble bubble-left">预测</div>
-            <div class="bubble bubble-right">展望</div>
             
-            <div class="logo-container">
-                <img src="images/logo.png" class="app-logo" onerror="this.style.display='none';">
-            </div>
-
             <div class="mystic-logo-container">
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -473,6 +475,13 @@
                     </g>
                 </svg>
             </div>
+
+            <div class="logo-container">
+                <img src="images/logo.png" class="app-logo" onerror="this.style.display='none';">
+            </div>
+
+            <div class="bubble bubble-left">预测</div>
+            <div class="bubble bubble-right">展望</div>
         </div>
 
         <h1>2026 大猜想</h1>
@@ -500,7 +509,7 @@
         <div class="detail-content">
             <div class="detail-close" onclick="closeDetail()">×</div>
             <img id="detail-img-el" src="" class="detail-img">
-            <a id="detail-btn-el" href="#" target="_blank" class="btn-detail-link">查看深度解读 ➔</a>
+            <a id="detail-btn-el" href="#" target="_blank" class="btn-detail-link">查看详解 ➔</a>
         </div>
     </div>
 
@@ -524,18 +533,31 @@
         const cardBackImg = "images/card_back.jpg"; 
         const sharePosterImg = "images/share_poster.jpg";
 
+        // --- 核心配置：已更新跳转链接 ---
         const tarotData = [
-            { id: 1, title: "黄金天花板", img: "images/card_01.jpg", url: "https://www.jin10.com/topic/gold" },
-            { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://www.jin10.com" },
-            { id: 3, title: "AI泡沫", img: "images/card_03.jpg", url: "https://www.jin10.com" },
+            // 1. 黄金
+            { id: 1, title: "黄金天花板", img: "images/card_01.jpg", url: "https://flash.jin10.com/detail/20251229164727998800" },
+            // 2. 和平奖
+            { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://xnews.jin10.com/details/207220?id=207220" },
+            // 3. AI泡沫
+            { id: 3, title: "AI泡沫", img: "images/card_03.jpg", url: "https://xnews.jin10.com/details/204633?id=204633" },
+            // 4. 谷歌市值
             { id: 4, title: "谷歌市值", img: "images/card_04.jpg", url: "https://www.jin10.com" },
+            // 5. 贸易壁垒
             { id: 5, title: "贸易壁垒", img: "images/card_05.jpg", url: "https://www.jin10.com" },
-            { id: 6, title: "美联储降息", img: "images/card_06.jpg", url: "https://www.jin10.com" },
+            // 6. 美联储降息
+            { id: 6, title: "美联储降息", img: "images/card_06.jpg", url: "https://xnews.jin10.com/details/205248?id=205248" },
+            // 7. 无人驾驶
             { id: 7, title: "无人驾驶", img: "images/card_07.jpg", url: "https://www.jin10.com" },
+            // 8. 地缘冲突
             { id: 8, title: "地缘冲突", img: "images/card_08.jpg", url: "https://www.jin10.com" },
-            { id: 9, title: "中期选举", img: "images/card_09.jpg", url: "https://www.jin10.com" },
+            // 9. 中期选举
+            { id: 9, title: "中期选举", img: "images/card_09.jpg", url: "https://xnews.jin10.com/details/206869?id=206869" },
+            // 10. 政权交接
             { id: 10, title: "政权交接", img: "images/card_10.jpg", url: "https://www.jin10.com" },
+            // 11. 复联5
             { id: 11, title: "复联5好莱坞", img: "images/card_11.jpg", url: "https://www.jin10.com" },
+            // 12. 世界杯
             { id: 12, title: "世界杯夺冠", img: "images/card_12.jpg", url: "https://www.jin10.com" }
         ];
 
