@@ -482,7 +482,7 @@
         const cardBackImg = "images/card_back.jpg"; 
         const sharePosterImg = "images/share_poster.jpg";
 
-        // --- 核心配置：已更新跳转链接 ---
+        // --- 核心配置：所有链接已更新 ---
         const tarotData = [
             // 1. 贵金属天花板
             { id: 1, title: "贵金属天花板", img: "images/card_01.jpg", url: "https://flash.jin10.com/detail/20251229164727998800" },
@@ -490,22 +490,22 @@
             { id: 2, title: "诺贝尔和平奖", img: "images/card_02.jpg", url: "https://xnews.jin10.com/details/207220?id=207220" },
             // 3. AI泡沫
             { id: 3, title: "AI泡沫", img: "images/card_03.jpg", url: "https://xnews.jin10.com/details/204633?id=204633" },
-            // 4. 谷歌市值
-            { id: 4, title: "谷歌市值", img: "images/card_04.jpg", url: "https://www.jin10.com" },
-            // 5. 贸易壁垒
-            { id: 5, title: "贸易壁垒", img: "images/card_05.jpg", url: "https://www.jin10.com" },
+            // 4. 谷歌市值 (已更新)
+            { id: 4, title: "谷歌市值", img: "images/card_04.jpg", url: "https://xnews.jin10.com/details/207329" },
+            // 5. 贸易壁垒 (已更新)
+            { id: 5, title: "贸易壁垒", img: "images/card_05.jpg", url: "https://xnews.jin10.com/details/207463" },
             // 6. 美联储降息
             { id: 6, title: "美联储降息", img: "images/card_06.jpg", url: "https://xnews.jin10.com/details/205248?id=205248" },
-            // 7. 无人驾驶
-            { id: 7, title: "无人驾驶", img: "images/card_07.jpg", url: "https://www.jin10.com" },
-            // 8. 地缘冲突
-            { id: 8, title: "地缘冲突", img: "images/card_08.jpg", url: "https://www.jin10.com" },
+            // 7. 无人驾驶 (已更新)
+            { id: 7, title: "无人驾驶", img: "images/card_07.jpg", url: "https://xnews.jin10.com/details/207342" },
+            // 8. 地缘冲突 (已更新)
+            { id: 8, title: "地缘冲突", img: "images/card_08.jpg", url: "https://xnews.jin10.com/details/205722?id=205722" },
             // 9. 中期选举
             { id: 9, title: "中期选举", img: "images/card_09.jpg", url: "https://xnews.jin10.com/details/206869?id=206869" },
-            // 10. 政权交接
-            { id: 10, title: "政权交接", img: "images/card_10.jpg", url: "https://www.jin10.com" },
-            // 11. 复联5
-            { id: 11, title: "复联5好莱坞", img: "images/card_11.jpg", url: "https://www.jin10.com" },
+            // 10. 政权交接 (已更新)
+            { id: 10, title: "政权交接", img: "images/card_10.jpg", url: "https://xnews.jin10.com/details/207480?id=207480" },
+            // 11. 复联5 (已更新)
+            { id: 11, title: "复联5好莱坞", img: "images/card_11.jpg", url: "https://xnews.jin10.com/details/202678?id=202678" },
             // 12. 世界杯
             { id: 12, title: "世界杯夺冠", img: "images/card_12.jpg", url: "https://www.jin10.com" }
         ];
@@ -650,7 +650,7 @@
             tarotData.forEach(data => {
                 const item = document.createElement('div');
                 item.className = 'report-item';
-                // ⚠️ 这里只显示图片，不显示文字标题
+                // ⚠️ 只显示图片，不显示文字
                 item.innerHTML = `
                     <img src="${data.img}" class="report-img" onerror="this.parentElement.innerHTML='<div style=\\'color:rgba(255,255,255,0.5);font-size:10px;border:1px solid rgba(255,255,255,0.1);padding:10px;aspect-ratio:1/1.618;display:flex;align-items:center;justify-content:center;\\'>缺失</div>'">
                 `;
